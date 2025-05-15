@@ -14,6 +14,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//Brief Description of the models
+//User: Represents a user in the system; users can create posts and replies.
+//Forum: Represents a forum where users can create posts. Forums are organized by topics.
+//Post: Represents a post created by a user in a single forum; each post can have multiple replies.
+//Reply: Represents a reply to a post; each reply is associated with a specific post and user.
+
 model User {
   id        Int     @id @default(autoincrement())
   username  String  @unique
