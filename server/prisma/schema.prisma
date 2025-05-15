@@ -20,8 +20,15 @@ datasource db {
 //Post: Represents a post created by a user in a single forum; each post can have multiple replies.
 //Reply: Represents a reply to a post; each reply is associated with a specific post and user.
 
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
 model User {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid()) @db.Uuid
+  role      UserRole @default(USER)
   username  String  @unique
   email     String  @unique
 
@@ -44,8 +51,8 @@ model Post {
 
   replies   Reply[]
 
-  authorId  Int
-  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author    User?  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  authorId  String?
 
   forumId   Int
   forum     Forum   @relation(fields: [forumId], references: [id], onDelete: Cascade)
@@ -57,8 +64,8 @@ model Reply {
   id        Int     @id @default(autoincrement())
   content   String
   
-  authorId  Int
-  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author    User?  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  authorId  String?
 
   postId    Int
   post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
