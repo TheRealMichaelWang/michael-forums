@@ -18,12 +18,44 @@ model User {
   id        Int     @id @default(autoincrement())
   username  String  @unique
   email     String  @unique
+
+  posts     Post[]
+  replies   Reply[]
+}
+
+model Forum {
+  id        Int     @id @default(autoincrement())
+  title     String  @unique
+  about     String
+
+  posts     Post[]
 }
 
 model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String?
 
+  replies   Reply[]
+
+  authorId  Int
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  forumId   Int
+  forum     Forum   @relation(fields: [forumId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }
 
 model Reply {
+  id        Int     @id @default(autoincrement())
+  content   String
   
+  authorId  Int
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  postId    Int
+  post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
 }
