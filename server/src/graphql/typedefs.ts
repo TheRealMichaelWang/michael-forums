@@ -1,4 +1,5 @@
-// This file is part of the codebase for the Clerk authentication integration.
+//This file was pulled directly from the Golaith repository..
+//Essentially, this file is used to load the GraphQL schema files from the api folder.
 
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadTypedefsSync } from '@graphql-tools/load'
