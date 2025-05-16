@@ -1,9 +1,13 @@
 {
-  "name": "server",
+  "name": "michael-forums",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "tsc",
+    "dev": "ts-node-dev --respawn ./src/index.ts",
+    "start": "npm run compile && nodemon ./dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "graphql-codegen"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +25,9 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.6",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-resolvers": "^4.5.1",
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.18",
     "prisma": "^6.8.1",
