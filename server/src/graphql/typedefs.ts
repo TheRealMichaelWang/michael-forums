@@ -1,3 +1,5 @@
+// This file is part of the codebase for the Clerk authentication integration.
+
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadTypedefsSync } from '@graphql-tools/load'
 import { DocumentNode } from 'graphql'
