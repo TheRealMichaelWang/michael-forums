@@ -6,12 +6,16 @@ import { injectPrismaClient } from '../../util/prismaHelper'
 export class PostDao {
     constructor(@injectPrismaClient() private prisma: PrismaClient) {}
 
+    //Gets a post by UUID.
     public async getPostById(postId: string): Promise<Post> {
         return this.prisma.post.findUniqueOrThrow({
             where: { id: postId },
         })
     }
 
+    //Get all posts in a forum.
+    //Current page and page size are used for pagination. Current page is 1-indexed.
+    //Most recently created posts are shown first.
     public async getPostsInForum(forumId: string, currentPage: number, pageSize: number): Promise<Post[]> {
         return this.prisma.post.findMany({
             where: { forumId: forumId },
@@ -21,6 +25,7 @@ export class PostDao {
         })
     }
 
+    //Get all posts by a user.
     public async createPost(title: string, content: string, forumId: string, authorId: string): Promise<Post> {
         return this.prisma.post.create({
             data: {
@@ -32,6 +37,7 @@ export class PostDao {
         })
     }
 
+    //Update a post with either a new title or content, or both.
     public async updatePost(postId: string, title: string, content: string): Promise<Post> {
         return this.prisma.post.update({
             where: { id: postId },
@@ -42,6 +48,7 @@ export class PostDao {
         })
     }
 
+    //Delete a post by UUID.
     public async deletePost(postId: string): Promise<Post> {
         return this.prisma.post.delete({
             where: { id: postId },
