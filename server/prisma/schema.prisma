@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  //output   = "../generated/prisma"
 }
 
 datasource db {
@@ -22,7 +22,6 @@ datasource db {
 
 enum UserRole {
   USER
-  MODERATOR
   ADMIN
 }
 
@@ -32,20 +31,28 @@ model User {
   username  String  @unique
   email     String  @unique
 
+  authUserId String @unique
+
   posts     Post[]
   replies   Reply[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Forum {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid()) @db.Uuid
   title     String  @unique
   about     String
 
   posts     Post[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Post {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid()) @db.Uuid
   title     String
   content   String?
 
@@ -54,21 +61,23 @@ model Post {
   author    User?  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   authorId  String?
 
-  forumId   Int
+  forumId   String
   forum     Forum   @relation(fields: [forumId], references: [id], onDelete: Cascade)
-
+  
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Reply {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid()) @db.Uuid
   content   String
   
   author    User?  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   authorId  String?
 
-  postId    Int
+  postId    String
   post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
   
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
