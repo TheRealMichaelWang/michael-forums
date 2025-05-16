@@ -1,0 +1,10 @@
+type NoteQuery {
+    getForum(id: ID!): Forum!
+    getForums: [Forum!]!
+
+    getPost(id: ID!): Post!
+    getPosts(forumId: ID!): [Post!]!
+
+    getReply(id: ID!): Reply!
+    getReplies(postId: ID!): [Reply!]!
+}

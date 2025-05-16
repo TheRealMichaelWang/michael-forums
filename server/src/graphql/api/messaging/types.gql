@@ -1,0 +1,30 @@
+type Forum {
+    id: ID!
+    title: String!
+    about: String!
+
+    posts = [Post!]!
+}
+
+type Post {
+    id: ID!
+    title: String!
+    content: String!
+
+    replies = [Reply!]!
+
+    forumId: ID!
+
+    authorId: ID
+    authorName: String
+}
+
+type Reply {
+    id: ID!
+    content: String!
+
+    postId: ID!
+
+    authorId: ID
+    authorName: String
+}

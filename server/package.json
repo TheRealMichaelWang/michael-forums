@@ -11,6 +11,8 @@
   "description": "",
   "dependencies": {
     "@apollo/server": "^4.12.1",
+    "@graphql-tools/graphql-file-loader": "^8.0.19",
+    "@graphql-tools/load": "^8.1.0",
     "@prisma/client": "^6.8.1",
     "express": "^5.1.0",
     "graphql": "^16.11.0",

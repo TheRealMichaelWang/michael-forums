@@ -1,0 +1,13 @@
+type MessageMutation {
+    createForum(title: String!, about: String!): Forum!
+    editForum(id: ID!, title: String, about: String)
+    deleteForum(id: ID!): Boolean!
+
+    createPost(forumId: ID!, title: String!, content: String!): Post!
+    editPost(id: ID!, title: String, content: String)
+    deletePost(id: ID!): Boolean!
+
+    createReply(postId: ID!, content: String!): Reply!
+    editReply(id: ID!, content: String)
+    deleteReply(id: ID!): Boolean!
+}

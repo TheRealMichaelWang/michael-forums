@@ -1,0 +1,11 @@
+enum UserRole {
+    ADMIN,
+    USER
+}
+
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    role: UserRole!
+}
