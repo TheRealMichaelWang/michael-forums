@@ -3,12 +3,14 @@ import { PostDao } from "../dao/messaging/postDao";
 import { ReplyDao } from "../dao/messaging/replyDao";
 import { AuthorizationService } from "./authorizationService";
 import { injectable, inject } from "inversify";
+import { UserDao } from "../dao/user/userDao";
 
 @injectable()
 export class MessageService {
     constructor(@inject(ForumDao) private forumDao: ForumDao,
                 @inject(PostDao) private postDao: PostDao,
                 @inject(ReplyDao) private replyDao: ReplyDao,
+                @inject(UserDao) private userDao: UserDao,
                 @inject(AuthorizationService) private authorizationService: AuthorizationService) { }
 
     public async getForums(currentPage: number, pageSize: number) {
@@ -84,5 +86,12 @@ export class MessageService {
             throw new Error("User is not authorized to delete this reply.");
         }
         return await this.replyDao.deleteReply(id);
+    }
+    
+    public async getUserPosts(subjectId: string, currentPage: number, pageSize: number, userId?: string) {
+        if (!await this.authorizationService.canViewProfile(userId)) {
+            throw new Error("User is not authorized to view other user's posts.");
+        }
+        return await this.userDao.getUserPosts(subjectId, currentPage, pageSize);
     }
 }

@@ -65,4 +65,8 @@ export class AuthorizationService {
     public async canDeleteReply(replyId: string, userId?: string): Promise<boolean> {
         return this.canEditReply(replyId, userId); // only admins can delete replies
     }
+
+    public async canViewProfile(userId?: string): Promise<boolean> {
+        return userId != undefined; // all users can view profiles as long as they are logged in
+    }
 }
