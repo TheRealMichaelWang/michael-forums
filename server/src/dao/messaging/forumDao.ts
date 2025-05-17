@@ -31,6 +31,9 @@ export class ForumDao {
                 title: title,
                 about: about,
             },
+            include: {
+                posts: true,
+            }
         })
     }
 
