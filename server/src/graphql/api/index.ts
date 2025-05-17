@@ -7,6 +7,8 @@ import { UserQuery } from './core/queries'
 import { Forum, Post } from './messaging/fields'
 import { MessageMutation } from './messaging/mutations'
 import { MessageQuery } from './messaging/queries'
+import { RootQuery } from './queries'
+import { RootMutation } from './mutations'
 
 //Fill the resolvers with resolvers defined in ts files through the subdirectories of api
 
@@ -22,5 +24,7 @@ export const resolvers: IResolvers<any, ResolverContext> = {
     Forum,
     Post,
     MessageMutation,
-    MessageQuery
+    MessageQuery,
+    RootQuery,
+    RootMutation
 }

@@ -52,10 +52,11 @@ model Post {
 
   replies   Reply[]
 
-  author    User?  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  authorId  String?
+  authorId  String? @db.Uuid
+  author    User?   @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  
 
-  forumId   String
+  forumId   String  @db.Uuid
   forum     Forum   @relation(fields: [forumId], references: [id], onDelete: Cascade)
   
   createdAt DateTime @default(now())
@@ -66,10 +67,10 @@ model Reply {
   id        String  @id @default(uuid()) @db.Uuid
   content   String
   
-  author    User?  @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  authorId  String?
+  authorId  String? @db.Uuid
+  author    User?   @relation(fields: [authorId], references: [id], onDelete: SetNull, onUpdate: SetNull)
 
-  postId    String
+  postId    String  @db.Uuid
   post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
   
   createdAt DateTime @default(now())

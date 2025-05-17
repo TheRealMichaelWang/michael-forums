@@ -1,6 +1,13 @@
 import { Container } from "inversify";
+import { PrismaClient } from "@prisma/client";
+import { InjectionToken } from "./prismaHelper";
 
-export const container = new Container({
+const container = new Container({
   autobind: true,
   defaultScope: 'Singleton',
 })
+
+const prisma = new PrismaClient()
+container.bind(InjectionToken.PrismaClient).toConstantValue(prisma)
+
+export { container }
