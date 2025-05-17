@@ -3,7 +3,7 @@ import { ResolverContext } from "..";
 import { PostDao } from "../../../dao/messaging/postDao";
 import { ReplyDao } from "../../../dao/messaging/replyDao";
 
-export const ForumField: ForumResolvers<ResolverContext> = {
+export const Forum: ForumResolvers<ResolverContext> = {
     posts: async (parent, { currentPage, pageSize } : ForumPostsArgs, contextValue) => {
         const postDao = contextValue.container.get(PostDao);
         const posts = await postDao.getPostsInForum(parent.id, currentPage, pageSize);
@@ -14,7 +14,7 @@ export const ForumField: ForumResolvers<ResolverContext> = {
     }
 }
 
-export const PostField: PostResolvers<ResolverContext> = {
+export const Post: PostResolvers<ResolverContext> = {
     replies: async (parent, { currentPage, pageSize }, contextValue) => {
         const replyDao = contextValue.container.get(ReplyDao);
         const replies = await replyDao.getRepliesInPost(parent.id, currentPage, pageSize);

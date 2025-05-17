@@ -1,0 +1,17 @@
+type RootMutation {
+    mockAccountMutations: MockAccountMutations
+    messageMutation: MessageMutation
+}
+
+type RootQuery {
+    user: User,
+    userQuery: UserQuery,
+    forum: Forum,
+    post: Post,
+    messageQuery: MessageQuery,
+}
+
+schema {
+  query: RootQuery
+  mutation: RootMutation
+}

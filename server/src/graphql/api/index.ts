@@ -1,10 +1,10 @@
 import { IResolvers } from '@graphql-tools/utils'
 import { AuthenticatedRequest } from '../../util/auth/AuthRequest'
 import { Container } from 'inversify'
-import { UserField } from './core/fields'
+import { User } from './core/fields'
 import { MockAccountMutations } from './core/mutations'
 import { UserQuery } from './core/queries'
-import { ForumField, PostField } from './messaging/fields'
+import { Forum, Post } from './messaging/fields'
 import { MessageMutation } from './messaging/mutations'
 import { MessageQuery } from './messaging/queries'
 
@@ -16,11 +16,11 @@ export interface ResolverContext {
 }
 
 export const resolvers: IResolvers<any, ResolverContext> = {
-    UserField,
+    User,
     MockAccountMutations,
     UserQuery,
-    ForumField,
-    PostField,
+    Forum,
+    Post,
     MessageMutation,
     MessageQuery
 }

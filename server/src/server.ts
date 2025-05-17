@@ -10,10 +10,12 @@ import { ResolverContext } from './graphql/api'
 import { createApolloServer } from './graphql/apolloServer'
 
 import { container } from './util/container'
-import { AuthenticatedRequest } from './util/auth/AuthRequest'
 
 const app = express()
 const port = process.env.PORT || 4000
+
+//Middleware
+app.use(express.json()) //to parse JSON bodies
 
 const CORS_WHITELIST = [
   'http://localhost:4000'
@@ -38,7 +40,7 @@ async function startServer() {
   )
 
   httpServer.listen(port, () => {
-    console.log("Server ready at http://localhost:${port}/graphql")
+    console.log("Server ready at http://localhost:%d/graphql", port)
   })
 }
 
