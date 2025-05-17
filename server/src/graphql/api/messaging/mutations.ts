@@ -1,17 +1,12 @@
 import { MessageMutationResolvers } from "../../../generated/graphql";
 import { ResolverContext } from "..";
-import assert from 'assert'
-import { ForumDao } from "../../../dao/messaging/forumDao";
-import { PostDao } from "../../../dao/messaging/postDao";
-import { ReplyDao } from "../../../dao/messaging/replyDao";
+import { MessageService } from "../../../services/messageService";
+import { AuthorizationService } from "../../../services/authorizationService";
 
 export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
     createForum: async (_, {title, about}, contextValue) => {
-        assert(contextValue.req.auth, "User must be authenticated to create a forum");
-        assert(contextValue.req.auth.user.isAdmin, "User must be an admin to create a forum");
-
-        var forumDao = contextValue.container.get(ForumDao);
-        var forum = await forumDao.createForum(title, about);
+        var messageService = contextValue.container.get(MessageService);
+        var forum = await messageService.createForum(title, about, contextValue.req.auth?.user.id);
 
         return {
             ...forum,
@@ -20,30 +15,30 @@ export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
     },
 
     editForum: async (_, {id, title, about}, contextValue) => {
-        assert(contextValue.req.auth, "User must be authenticated to edit a forum");
-        assert(contextValue.req.auth.user.isAdmin, "User must be an admin to edit a forum");
+        var authorizationService = contextValue.container.get(AuthorizationService);
+        if (!await authorizationService.canEditForum(contextValue.req.auth?.user.id)) {
+            return false;
+        }
 
-        var forumDao = contextValue.container.get(ForumDao);
-        await forumDao.updateForum(id, title, about);
-
+        var messageService = contextValue.container.get(MessageService);
+        await messageService.editForum(id, title, about, contextValue.req.auth?.user.id);
         return true;
     },
 
     deleteForum: async (_, {id}, contextValue) => {
-        assert(contextValue.req.auth, "User must be authenticated to delete a forum");
-        assert(contextValue.req.auth.user.isAdmin, "User must be an admin to delete a forum");
+        var authorizationService = contextValue.container.get(AuthorizationService);
+        if (!await authorizationService.canDeleteForum(contextValue.req.auth?.user.id)) {
+            return false;
+        }
 
-        var forumDao = contextValue.container.get(ForumDao);
-        await forumDao.deleteForum(id);
-
+        var messageService = contextValue.container.get(MessageService);
+        await messageService.deleteForum(id, contextValue.req.auth?.user.id);
         return true;
     },
 
     createPost: async (_, {forumId, title, content}, contextValue) => {
-        assert(contextValue.req.auth, "User must be authenticated to create a post");
-
-        var postDao = contextValue.container.get(PostDao);
-        var post = await postDao.createPost(forumId, title, content, contextValue.req.auth.user.id);
+        var messageService = contextValue.container.get(MessageService);
+        var post = await messageService.createPost(forumId, title, content, contextValue.req.auth?.user.id);
 
         return {
             ...post,
@@ -52,47 +47,49 @@ export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
     },
 
     editPost: async (_, {id, title, content}, contextValue) => {
-        assert(contextValue.req.auth, "User must be authenticated to edit a post");
-
-        var postDao = contextValue.container.get(PostDao);
-        await postDao.updatePost(id, title, content);
-
+        var authorizationService = contextValue.container.get(AuthorizationService);
+        if (!await authorizationService.canEditPost(id, contextValue.req.auth?.user.id)) {
+            return false;
+        }
+        var messageService = contextValue.container.get(MessageService);
+        await messageService.editPost(id, title, content, contextValue.req.auth?.user.id);
         return true;
     },
 
     deletePost: async (_, {id}, contextValue) => {
-        assert(contextValue.req.auth, "User must be authenticated to delete a post");
-
-        var postDao = contextValue.container.get(PostDao);
-        await postDao.deletePost(id);
-
+        var authorizationService = contextValue.container.get(AuthorizationService);
+        if (!await authorizationService.canDeletePost(id, contextValue.req.auth?.user.id)) {
+            return false;
+        }
+        var messageService = contextValue.container.get(MessageService);
+        await messageService.deletePost(id, contextValue.req.auth?.user.id);
         return true;
     },
 
     createReply: async (_, {postId, content}, contextValue) => {
-        assert(contextValue.req.auth, "User must be authenticated to create a reply");
-
-        var replyDao = contextValue.container.get(ReplyDao);
-        var reply = await replyDao.createReply(postId, content, contextValue.req.auth.user.id);
+        var messageService = contextValue.container.get(MessageService);
+        var reply = await messageService.createReply(postId, content, contextValue.req.auth?.user.id);
 
         return reply;
     },
 
     editReply: async (_, {id, content}, contextValue) => {
-        assert(contextValue.req.auth, "User must be authenticated to edit a reply");
-
-        var replyDao = contextValue.container.get(ReplyDao);
-        await replyDao.updateReply(id, content);
-
+        var authorizationService = contextValue.container.get(AuthorizationService);
+        if (!await authorizationService.canEditReply(id, contextValue.req.auth?.user.id)) {
+            return false;
+        }
+        var messageService = contextValue.container.get(MessageService);
+        await messageService.editReply(id, content, contextValue.req.auth?.user.id);
         return true;
     },
 
     deleteReply: async (_, {id}, contextValue) => {
-        assert(contextValue.req.auth, "User must be authenticated to delete a reply");
-
-        var replyDao = contextValue.container.get(ReplyDao);
-        await replyDao.deleteReply(id);
-
+        var authorizationService = contextValue.container.get(AuthorizationService);
+        if (!await authorizationService.canDeleteReply(id, contextValue.req.auth?.user.id)) {
+            return false;
+        }
+        var messageService = contextValue.container.get(MessageService);
+        await messageService.deleteReply(id, contextValue.req.auth?.user.id);
         return true;
     }
 }
