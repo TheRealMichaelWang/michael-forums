@@ -2,14 +2,13 @@ import { MessageMutationResolvers } from "../../../generated/graphql";
 import { ResolverContext } from "..";
 import assert from 'assert'
 import { ForumDao } from "../../../dao/messaging/forumDao";
-import { UserRole } from "@prisma/client";
 import { PostDao } from "../../../dao/messaging/postDao";
 import { ReplyDao } from "../../../dao/messaging/replyDao";
 
 export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
     createForum: async (_, {title, about}, contextValue) => {
         assert(contextValue.req.auth, "User must be authenticated to create a forum");
-        assert(contextValue.req.auth.user.role == UserRole.ADMIN, "User must be an admin to create a forum");
+        assert(contextValue.req.auth.user.isAdmin, "User must be an admin to create a forum");
 
         var forumDao = contextValue.container.get(ForumDao);
         var forum = await forumDao.createForum(title, about);
@@ -22,7 +21,7 @@ export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
 
     editForum: async (_, {id, title, about}, contextValue) => {
         assert(contextValue.req.auth, "User must be authenticated to edit a forum");
-        assert(contextValue.req.auth.user.role == UserRole.ADMIN, "User must be an admin to edit a forum");
+        assert(contextValue.req.auth.user.isAdmin, "User must be an admin to edit a forum");
 
         var forumDao = contextValue.container.get(ForumDao);
         await forumDao.updateForum(id, title, about);
@@ -32,7 +31,7 @@ export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
 
     deleteForum: async (_, {id}, contextValue) => {
         assert(contextValue.req.auth, "User must be authenticated to delete a forum");
-        assert(contextValue.req.auth.user.role == UserRole.ADMIN, "User must be an admin to delete a forum");
+        assert(contextValue.req.auth.user.isAdmin, "User must be an admin to delete a forum");
 
         var forumDao = contextValue.container.get(ForumDao);
         await forumDao.deleteForum(id);

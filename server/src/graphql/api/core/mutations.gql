@@ -1,0 +1,4 @@
+type MockAccountMutations {
+    mockAuth(id: ID!): User
+    mockRegister(username: String!, email: String!, authUserId: String!): User!
+}

@@ -1,5 +1,5 @@
 import { injectable } from 'inversify'
-import { PrismaClient, User, UserRole, Post } from '@prisma/client'
+import { PrismaClient, User, Post } from '@prisma/client'
 import { injectPrismaClient } from '../../util/prismaHelper'
 
 @injectable()
@@ -38,11 +38,11 @@ export class UserDao {
     }
 
     //Update a user with a new role.
-    public async updateUserRole(userId: string, role: UserRole): Promise<User> {
+    public async updateUserRole(userId: string, isAdmin: boolean): Promise<User> {
         return this.prisma.user.update({
             where: { id: userId },
             data: {
-                role: role,
+                isAdmin: isAdmin
             },
         })
     }
