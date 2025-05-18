@@ -3,7 +3,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import express from 'express'
+import { clerkMiddleware } from '@clerk/express'
 import { createServer } from 'http'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ResolverContext } from './graphql/api'
@@ -16,9 +18,12 @@ const port = process.env.PORT || 4000
 
 //Middleware
 app.use(express.json()) //to parse JSON bodies
+app.use(cookieParser()) //to parse cookies, which populate req.cookies
+app.use(clerkMiddleware()) //to authenticate requests
 
 const CORS_WHITELIST = [
-  'http://localhost:4000'
+  'http://localhost:4000',
+  'https://localhost:4000'
 ]
 
 async function startServer() {
@@ -32,8 +37,8 @@ async function startServer() {
     expressMiddleware(apolloServer, {
       context: async ({req}): Promise<ResolverContext> => {
         return {
-          req,
-          container,
+          req: req,
+          container: container,
         }
       },
     })

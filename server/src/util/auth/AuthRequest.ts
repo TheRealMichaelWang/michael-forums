@@ -1,7 +1,6 @@
 //This file was pulled directly from the Golaith repository..
 //The changes made were to
 
-import { User } from '@prisma/client'
 import { Request } from 'express'
 
 export interface ClerkSessionClaims {
@@ -14,7 +13,6 @@ export interface ClerkSessionClaims {
 interface AuthenticatedPayload {
   auth: {
     userId: string
-    user: User
     sessionClaims: ClerkSessionClaims
   } | null
 }
