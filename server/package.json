@@ -24,7 +24,9 @@
     "graphql": "^16.11.0",
     "inversify": "^7.5.1",
     "pg": "^8.16.0",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.6",
