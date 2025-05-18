@@ -1,8 +1,8 @@
-import { MockAccountMutationsResolvers } from "../../../generated/graphql";
+import { UserMutationResolvers } from "../../../generated/graphql";
 import { ResolverContext } from "..";
 import { UserDao } from "../../../dao/user/userDao";
 
-export const MockAccountMutations: MockAccountMutationsResolvers<ResolverContext> = {
+export const UserMutations: UserMutationResolvers<ResolverContext> = {
     mockRegister: async (parent, { username, email, authUserId}, contextValue) => {
         const userDao = contextValue.container.get(UserDao);
         const account = await userDao.createUser(username, email, authUserId);

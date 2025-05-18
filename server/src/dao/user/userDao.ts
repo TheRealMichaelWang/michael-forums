@@ -7,7 +7,7 @@ export class UserDao {
     constructor(@injectPrismaClient() private prisma: PrismaClient) {}
 
     //Gets a user by UUID.
-    public async getUserById(userId: string): Promise<User> {
+    public async getUserById(userId: string): Promise<User | null> {
         return this.prisma.user.findUniqueOrThrow({
             where: { id: userId },
         })

@@ -17,7 +17,7 @@ export class AuthorizationService {
         }
 
         const user = await this.userDao.getUserById(userId);
-        return user.isAdmin;
+        return user != null && user.isAdmin;
     }
 
     public async canCreateForum(userId?: string): Promise<boolean> {

@@ -10,7 +10,7 @@ import { createServer } from 'http'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ResolverContext } from './graphql/api'
 import { createApolloServer } from './graphql/apolloServer'
-
+import { ensureRegistration } from './util/auth/ensureRegistration'
 import { container } from './util/container'
 
 const app = express()
@@ -20,6 +20,7 @@ const port = process.env.PORT || 4000
 app.use(express.json()) //to parse JSON bodies
 app.use(cookieParser()) //to parse cookies, which populate req.cookies
 app.use(clerkMiddleware()) //to authenticate requests
+app.use(ensureRegistration) //to ensure new users are registered
 
 const CORS_WHITELIST = [
   'http://localhost:4000',
@@ -36,6 +37,8 @@ async function startServer() {
     cors<cors.CorsRequest>({ origin: CORS_WHITELIST, credentials: true }),
     expressMiddleware(apolloServer, {
       context: async ({req}): Promise<ResolverContext> => {
+
+
         return {
           req: req,
           container: container,

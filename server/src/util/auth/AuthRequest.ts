@@ -3,10 +3,10 @@
 
 import { Request } from 'express'
 
+//session claims are custom and configured in the Clerk dashboard
 export interface ClerkSessionClaims {
-  userId: string
-  firstName?: string
-  lastName?: string
+  authUserId: string
+  username: string
   email: string
 }
 

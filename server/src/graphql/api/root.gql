@@ -1,5 +1,5 @@
 type RootMutation {
-    mockAccountMutations: MockAccountMutations
+    userMutation: UserMutation
     messageMutation: MessageMutation
 }
 
