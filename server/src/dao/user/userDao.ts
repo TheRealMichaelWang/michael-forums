@@ -2,7 +2,6 @@ import { injectable } from 'inversify'
 import { PrismaClient, User, Post } from '@prisma/client'
 import { injectPrismaClient } from '../../util/prismaHelper'
 import { ClerkSessionClaims } from '../../util/auth/authRequest'
-import { logger } from '../../util/logger'
 
 @injectable()
 export class UserDao {
