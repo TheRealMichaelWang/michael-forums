@@ -7,6 +7,7 @@ const container = new Container({
   defaultScope: 'Singleton',
 })
 
+// Bind the global PrismaClient to the container
 const prisma = new PrismaClient()
 container.bind(InjectionToken.PrismaClient).toConstantValue(prisma)
 

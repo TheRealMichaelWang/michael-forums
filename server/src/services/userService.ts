@@ -26,11 +26,7 @@ export class UserService {
         return await this.userDao.getUserPosts(subjectId, currentPage, pageSize);
     }
 
-    public async ensureUserExists(sessionClaims: ClerkSessionClaims): Promise<boolean> {
-        if (await this.userDao.getUserById(sessionClaims.authUserId) == null) { //user needs to be created
-            await this.userDao.createUser(sessionClaims.username, sessionClaims.email, sessionClaims.authUserId);
-            return true; //user was created
-        }
-        return false; //user already exists
+    public async ensureUserExists(sessionClaims: ClerkSessionClaims) {
+        return this.userDao.ensureUserExists(sessionClaims);
     }
 }

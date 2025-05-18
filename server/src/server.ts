@@ -37,8 +37,6 @@ async function startServer() {
     cors<cors.CorsRequest>({ origin: CORS_WHITELIST, credentials: true }),
     expressMiddleware(apolloServer, {
       context: async ({req}): Promise<ResolverContext> => {
-
-
         return {
           req: req,
           container: container,

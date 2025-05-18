@@ -3,9 +3,11 @@ import { AuthenticatedRequest } from "./authRequest";
 import { NextFunction, Response } from "express";
 import { container } from "../container";
 
+// This middleware ensures that clerk session claims users are registered in the database.
+// If the user is not registered, it will create a new user in the database.
 export async function ensureRegistration(
   req: AuthenticatedRequest,
-  res: Response,
+  _: Response,
   next: NextFunction
 ) {
   try {

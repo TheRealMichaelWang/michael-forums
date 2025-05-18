@@ -1,6 +1,7 @@
 import { injectable } from 'inversify'
 import { PrismaClient, User, Post } from '@prisma/client'
 import { injectPrismaClient } from '../../util/prismaHelper'
+import { ClerkSessionClaims } from '../../util/auth/authRequest'
 
 @injectable()
 export class UserDao {
@@ -11,6 +12,19 @@ export class UserDao {
         return this.prisma.user.findUniqueOrThrow({
             where: { id: userId },
         })
+    }
+
+    //Ensure a user exists in the database.
+    public async ensureUserExists(sessionClaims: ClerkSessionClaims) {
+        await this.prisma.user.upsert({
+            where: { authUserId: sessionClaims.authUserId },
+            update: {},
+            create: {
+                username: sessionClaims.username,
+                email: sessionClaims.email,
+                authUserId: sessionClaims.authUserId,
+            },
+        });
     }
 
     //Gets a user by email or username.
