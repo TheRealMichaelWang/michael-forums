@@ -15,16 +15,19 @@ export class UserDao {
     }
 
     //Ensure a user exists in the database.
-    public async ensureUserExists(sessionClaims: ClerkSessionClaims) {
-        await this.prisma.user.upsert({
+    public async ensureUserExists(sessionClaims: ClerkSessionClaims): Promise<boolean> {
+        var user = await this.prisma.user.upsert({
             where: { authUserId: sessionClaims.authUserId },
-            update: {},
+            update: {
+                lastActivityAt: new Date(),
+            },
             create: {
                 username: sessionClaims.username,
                 email: sessionClaims.email,
                 authUserId: sessionClaims.authUserId,
             },
         });
+        return user.updatedAt === user.createdAt;
     }
 
     //Gets a user by email or username.

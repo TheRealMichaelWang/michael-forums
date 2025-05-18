@@ -2,6 +2,7 @@ import { UserDao } from "../dao/user/userDao";
 import { injectable, inject } from "inversify";
 import { AuthorizationService } from "./authorizationService";
 import { ClerkSessionClaims } from "../util/auth/authRequest";
+import { logger } from "../util/logger";
 
 @injectable()
 export class UserService {
@@ -26,7 +27,11 @@ export class UserService {
         return await this.userDao.getUserPosts(subjectId, currentPage, pageSize);
     }
 
-    public async ensureUserExists(sessionClaims: ClerkSessionClaims) {
-        return this.userDao.ensureUserExists(sessionClaims);
+    public async ensureUserExists(sessionClaims: ClerkSessionClaims): Promise<boolean> {
+        var result = await this.userDao.ensureUserExists(sessionClaims);
+        if (result) {
+            logger.info(`User ${sessionClaims.username} (${sessionClaims.authUserId}) created.`);
+        }
+        return result;
     }
 }
