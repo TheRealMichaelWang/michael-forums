@@ -7,7 +7,6 @@ const Header: React.FC = () => {
     return (
     <header>
         <nav>
-            <UserButton />
             <Link to="/">Home</Link>
         </nav>
         <div>

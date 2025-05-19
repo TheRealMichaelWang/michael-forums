@@ -23,8 +23,8 @@ app.use(clerkMiddleware()) //to authenticate requests
 app.use(ensureRegistration) //to ensure new users are registered
 
 const CORS_WHITELIST = [
-  'http://localhost:4000',
-  'https://localhost:4000'
+  'http://localhost:5173',
+  'https://localhost:5173',
 ]
 
 async function startServer() {
