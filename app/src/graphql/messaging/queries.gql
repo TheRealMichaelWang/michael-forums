@@ -9,14 +9,14 @@ query GetForums($currentPage: Int!, $pageSize: Int!) {
 }
 
 query GetForum($id: ID!, $currentPage: Int!, $pageSize: Int!) {
-    forum(id: $id) {
+  forum(id: $id) {
+    id
+    title
+    about
+    posts(currentPage: $currentPage, pageSize: $pageSize) {
       id
       title
-      about
-      posts(currentPage: $currentPage, pageSize: $pageSize) {
-        id
-        title
-        authorName
-      }
+      authorName
     }
   }
+}

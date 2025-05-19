@@ -4,10 +4,10 @@ type RootMutation {
 }
 
 type RootQuery {
-    user: User,
+#    user: User,
     userQuery: UserQuery,
-    forum: Forum,
-    post: Post,
+#    forum: Forum,
+#    post: Post,
     messageQuery: MessageQuery,
 }
 

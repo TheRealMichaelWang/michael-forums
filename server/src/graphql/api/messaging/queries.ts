@@ -11,5 +11,23 @@ export const MessageQuery: MessageQueryResolvers<ResolverContext> = {
             ...forum,
             posts: [], // Ensure 'posts' is always present
         }));
+    },
+
+    getForum: async (_, { id }, contextValue) => {
+        let messageService = contextValue.container.get(MessageService);
+        const forum = await messageService.getForum(id);
+        return {
+            ...forum,
+            posts: [], // Ensure 'posts' is always present
+        };
+    },
+
+    getPost: async (_, { id }, contextValue) => {
+        let messageService = contextValue.container.get(MessageService);
+        const post = await messageService.getPost(id);
+        return {
+            ...post,
+            replies: [], // Ensure 'replies' is always present
+        };
     }
 }

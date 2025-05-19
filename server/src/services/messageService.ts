@@ -18,6 +18,10 @@ export class MessageService {
         return await this.forumDao.getAllForums(currentPage, pageSize);
     }
 
+    public async getForum(id: string) {
+        return await this.forumDao.getForumById(id);
+    }
+
     public async getPosts(forumId: string, currentPage: number, pageSize: number) {
         const posts = await this.postDao.getPostsInForum(forumId, currentPage, pageSize);
         return Promise.all(posts.map(async post => {
@@ -27,6 +31,15 @@ export class MessageService {
                 authorName: user?.username ?? null,
             };
         }));
+    }
+
+    public async getPost(id: string) {
+        const post = await this.postDao.getPostById(id);
+        const user = await this.userDao.getUserById(post.authorId);
+        return {
+            ...post,
+            authorName: user?.username ?? null,
+        };
     }
 
     public async getReplies(postId: string, currentPage: number, pageSize: number) {

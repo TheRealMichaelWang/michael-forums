@@ -1,3 +1,5 @@
 type MessageQuery {
     getForums(currentPage: Int!, pageSize: Int!): [Forum!]!
+    getForum(id: ID!): Forum!
+    getPost(id: ID!): Post!
 }
