@@ -1,20 +1,6 @@
 import React from "react";
-import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
-
-//define the GraphQL query to fetch forums;
-//this query is defined in this file for now, but it can be moved to a separate file later
-const GET_FORUMS = gql`
-    query GetForums($currentPage: Int!, $pageSize: Int!) {
-        messageQuery {
-            getForums(currentPage: $currentPage, pageSize: $pageSize) {
-                id
-                title
-                about
-            }
-        }
-    }
-`;
+import { useGetForumsQuery } from "../generated/graphql";
 
 // HomePage component fetches and displays a list of forums
 const HomePage: React.FC = () => {
@@ -22,14 +8,14 @@ const HomePage: React.FC = () => {
     const [currentPage, setCurrentPage] = React.useState(1);
     const pageSize = 10; // number of forums to display per page; hardcoded for now
     // useQuery hook to execute the GraphQL query
-    const { loading, error, data } = useQuery(GET_FORUMS, {
+    const { loading, error, data } = useGetForumsQuery({
         variables: { currentPage: 1, pageSize: 10 },
     });
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
-    const forums = data?.messageQuery.getForums || [];
+    const forums = data?.messageQuery?.getForums || [];
     const hasNextPage = forums.length === pageSize; // check if there are more forums to load
 
     return (
