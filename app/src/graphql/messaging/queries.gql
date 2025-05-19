@@ -1,0 +1,22 @@
+query GetForums($currentPage: Int!, $pageSize: Int!) {
+    messageQuery {
+        getForums(currentPage: $currentPage, pageSize: $pageSize) {
+            id
+            title
+            about
+        }
+    }
+}
+
+query GetForum($id: ID!, $currentPage: Int!, $pageSize: Int!) {
+    forum(id: $id) {
+      id
+      title
+      about
+      posts(currentPage: $currentPage, pageSize: $pageSize) {
+        id
+        title
+        authorName
+      }
+    }
+  }

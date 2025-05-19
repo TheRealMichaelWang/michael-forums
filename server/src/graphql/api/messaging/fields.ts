@@ -9,7 +9,7 @@ export const Forum: ForumResolvers<ResolverContext> = {
 
         return posts.map(post => ({
             ...post,
-            replies: [], // Ensure 'replies' is always present
+            replies: [] // Ensure 'replies' is always present
         }));
     }
 }

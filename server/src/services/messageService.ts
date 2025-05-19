@@ -4,12 +4,14 @@ import { ReplyDao } from "../dao/messaging/replyDao";
 import { AuthorizationService } from "./authorizationService";
 import { injectable, inject } from "inversify";
 import { logger } from "../util/logger";
+import { UserDao } from "../dao/user/userDao";
 
 @injectable()
 export class MessageService {
     constructor(@inject(ForumDao) private forumDao: ForumDao,
                 @inject(PostDao) private postDao: PostDao,
                 @inject(ReplyDao) private replyDao: ReplyDao,
+                @inject(UserDao) private userDao: UserDao,
                 @inject(AuthorizationService) private authorizationService: AuthorizationService) { }
 
     public async getForums(currentPage: number, pageSize: number) {
@@ -17,11 +19,25 @@ export class MessageService {
     }
 
     public async getPosts(forumId: string, currentPage: number, pageSize: number) {
-        return await this.postDao.getPostsInForum(forumId, currentPage, pageSize);
+        const posts = await this.postDao.getPostsInForum(forumId, currentPage, pageSize);
+        return Promise.all(posts.map(async post => {
+            const user = await this.userDao.getUserById(post.authorId);
+            return {
+                ...post,
+                authorName: user?.username ?? null,
+            };
+        }));
     }
 
     public async getReplies(postId: string, currentPage: number, pageSize: number) {
-        return await this.replyDao.getRepliesInPost(postId, currentPage, pageSize);
+        const replies = await this.replyDao.getRepliesInPost(postId, currentPage, pageSize);
+        return Promise.all(replies.map(async reply => {
+            const user = await this.userDao.getUserById(reply.authorId);
+            return {
+                ...reply,
+                authorName: user?.username ?? null,
+            };
+        }));
     }
 
     public async createForum(title: string, about: string, userId?: string) {

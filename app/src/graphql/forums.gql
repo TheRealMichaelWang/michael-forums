@@ -1,9 +1,0 @@
-query GetForums($currentPage: Int!, $pageSize: Int!) {
-    messageQuery {
-        getForums(currentPage: $currentPage, pageSize: $pageSize) {
-            id
-            title
-            about
-        }
-    }
-}
