@@ -1,10 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+// src/main.tsx
+import ReactDOM from 'react-dom/client';
+import { ApolloProvider } from '@apollo/client';
+import { BrowserRouter } from 'react-router-dom';
+import { ClerkProvider } from '@clerk/clerk-react';
+import { client } from './client';
+import App from './App';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+//not sure but this is supposed to access the clerk key from the .env file
+const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY; 
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <ClerkProvider publishableKey={clerkPublishableKey}>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ApolloProvider>
+  </ClerkProvider>
+);

@@ -13,7 +13,7 @@ export class UserService {
         if (!await this.authorizationService.canViewProfile(userId)) {
             throw new Error("User is not authorized to view other user's profile.");
         }
-        var user = await this.userDao.getUserById(id);
+        let user = await this.userDao.getUserById(id);
         if (!user) {
             throw new Error("User not found.");
         }
@@ -28,7 +28,7 @@ export class UserService {
     }
 
     public async ensureUserExists(sessionClaims: ClerkSessionClaims): Promise<boolean> {
-        var result = await this.userDao.ensureUserExists(sessionClaims);
+        let result = await this.userDao.ensureUserExists(sessionClaims);
         if (result) {
             logger.info(`User ${sessionClaims.username} (${sessionClaims.authUserId}) created.`);
         }

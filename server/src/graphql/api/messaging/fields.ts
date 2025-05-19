@@ -4,7 +4,7 @@ import { MessageService } from "../../../services/messageService";
 
 export const Forum: ForumResolvers<ResolverContext> = {
     posts: async (parent, { currentPage, pageSize } : ForumPostsArgs, contextValue) => {
-        var messageService = contextValue.container.get(MessageService);
+        let messageService = contextValue.container.get(MessageService);
         const posts = await messageService.getPosts(parent.id, currentPage, pageSize);
 
         return posts.map(post => ({
@@ -16,7 +16,7 @@ export const Forum: ForumResolvers<ResolverContext> = {
 
 export const Post: PostResolvers<ResolverContext> = {
     replies: async (parent, { currentPage, pageSize }, contextValue) => {
-        var messageService = contextValue.container.get(MessageService);
+        let messageService = contextValue.container.get(MessageService);
         return await messageService.getReplies(parent.id, currentPage, pageSize);
     }
 }
