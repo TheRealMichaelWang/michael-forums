@@ -1,0 +1,7 @@
+mutation CreatePost($forumId: ID!, $title: String!, $content: String!) {
+  messageMutation {
+    createPost(forumId: $forumId, title: $title, content: $content) {
+      id
+    }
+  }
+}

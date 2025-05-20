@@ -3,6 +3,7 @@ import { injectable, inject } from "inversify";
 import { AuthorizationService } from "./authorizationService";
 import { ClerkSessionClaims } from "../util/auth/authRequest";
 import { logger } from "../util/logger";
+import { User } from "@prisma/client";
 
 @injectable()
 export class UserService {
@@ -27,7 +28,7 @@ export class UserService {
         return await this.userDao.getUserPosts(subjectId, currentPage, pageSize);
     }
 
-    public async ensureUserExists(sessionClaims: ClerkSessionClaims): Promise<boolean> {
+    public async ensureUserExists(sessionClaims: ClerkSessionClaims): Promise<[User, boolean]> {
         let result = await this.userDao.ensureUserExists(sessionClaims);
         if (result) {
             logger.info(`User ${sessionClaims.username} (${sessionClaims.authUserId}) created.`);

@@ -15,7 +15,8 @@ export async function ensureRegistration(
     const sessionClaims = req.auth?.sessionClaims;
     
     if (sessionClaims) {
-        await userService.ensureUserExists(sessionClaims);
+      var res = await userService.ensureUserExists(sessionClaims);
+      req.auth!.userId = res[0].id;
     }
   } catch (error) {
     console.error("Error ensuring user registration:", error);

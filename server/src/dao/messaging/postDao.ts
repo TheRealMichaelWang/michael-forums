@@ -26,7 +26,7 @@ export class PostDao {
     }
 
     //Get all posts by a user.
-    public async createPost(title: string, content: string, forumId: string, authorId: string): Promise<Post> {
+    public async createPost(forumId: string, title: string, content: string, authorId: string): Promise<Post> {
         return this.prisma.post.create({
             data: {
                 title: title,

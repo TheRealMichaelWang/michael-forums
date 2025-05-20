@@ -1,4 +1,4 @@
-import { Forum, Post, User } from '../generated/graphql'
+import { Forum, Post, User, Reply } from '../generated/graphql'
 
 //an empty user object to be used as a default value
 export const emptyUser: User = {
@@ -24,4 +24,11 @@ export const emptyPost : Post = {
     content: '',
     forumId: '',
     replies: []
+}
+
+export const emptyReply : Reply = {
+    id: '',
+    content: '',
+    postId: '',
+    authorId: ''
 }

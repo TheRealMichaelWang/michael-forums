@@ -11,9 +11,7 @@ const Header: React.FC = () => {
         </nav>
         <div>
             <SignedIn>
-                <UserButton>
-                    <button>Profile</button>
-                </UserButton>
+                <UserButton/>
                 <SignOutButton>
                     <button>Log Out</button>
                 </SignOutButton>

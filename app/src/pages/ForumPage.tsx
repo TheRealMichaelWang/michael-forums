@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useGetForumQuery } from "../generated/graphql";
+import { SignedIn } from "@clerk/clerk-react";
 
 const ForumPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -27,10 +28,13 @@ const ForumPage: React.FC = () => {
         <div>
             <h1>{forum.title}</h1>
             <h2>{forum.about}</h2>
+            <SignedIn>
+                <p><Link to={`/create-post/${forum.id}`}>Create a Post</Link></p>
+            </SignedIn>
             <ul>
                 {forum.posts.map((post) => (
                     <li key={post.id}>
-                        <Link to={`//${post.id}`}>
+                        <Link to={`/posts/${post.id}`}>
                             <h3>{post.title}</h3>
                             <p>By {post.authorName ?? "Deleted User"}</p>
                         </Link>
