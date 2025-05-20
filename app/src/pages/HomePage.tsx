@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
         <div>
             <h1>Forums</h1>
             <ul>
-                {forums.map((forum: any) => (
+                {forums.map((forum) => (
                 <li key={forum.id}>
                     <Link to={`/forums/${forum.id}`}>
                     <h2>{forum.title}</h2>
