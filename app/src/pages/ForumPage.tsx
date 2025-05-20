@@ -26,29 +26,33 @@ const ForumPage: React.FC = () => {
 
     return (
         <div className="list">
-            <h1>{forum.title}</h1>
+            <h1 className="header-title">{forum.title}</h1>
             <h2>{forum.about}</h2>
             <SignedIn>
-                <p><Link to={`/create-post/${forum.id}`}>Create a Post</Link></p>
+                <Link to={`/create-post/${forum.id}`} className="button-primary my-2 inline-block mx-auto">
+                    Create a Post
+                </Link>
             </SignedIn>
             <ul>
                 {forum.posts.map((post) => (
-                    <li key={post.id}>
+                    <li key={post.id} className="item">
                         <Link to={`/posts/${post.id}`}>
-                            <h3>{post.title}</h3>
-                            <p>By {post.authorName ?? "Deleted User"}</p>
+                            <h3 className="item-title">{post.title}</h3>
+                            <p className="item-about">By {post.authorName ?? "Deleted User"}</p>
                         </Link>
                     </li>
                 ))}
             </ul>
-            <div>
+            <div className="pagination">
                 <button
+                    className="pagination-button"
                     onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
                 >
                     Previous
                 </button>
                 <button
+                    className="pagination-button"
                     onClick={() => setCurrentPage(currentPage + 1)}
                     disabled={!hasNextPage}
                 >
