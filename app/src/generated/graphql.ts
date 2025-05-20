@@ -236,7 +236,7 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getPost: { __typename?: 'Post', id: string, title: string, content: string, authorName?: string | null, replies: Array<{ __typename?: 'Reply', id: string, content: string, authorName?: string | null }> } } | null };
+export type GetPostQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getPost: { __typename?: 'Post', id: string, title: string, content: string, authorName?: string | null, forumId: string, replies: Array<{ __typename?: 'Reply', id: string, content: string, authorName?: string | null }> } } | null };
 
 
 export const CreatePostDocument = gql`
@@ -380,6 +380,7 @@ export const GetPostDocument = gql`
       title
       content
       authorName
+      forumId
       replies(currentPage: $currentPage, pageSize: $pageSize) {
         id
         content

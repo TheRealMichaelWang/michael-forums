@@ -30,6 +30,7 @@ query GetPost($id: ID!, $currentPage: Int!, $pageSize: Int!) {
       title
       content
       authorName
+      forumId
 
       replies(currentPage: $currentPage, pageSize: $pageSize) {
         id

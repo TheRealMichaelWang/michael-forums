@@ -39,6 +39,11 @@ const PostPage: React.FC = () => {
                 ))}
             </ul>
             <div>
+                <Link to={`/forums/${post.forumId}`}>
+                    Back to Forum
+                </Link>
+            </div>
+            <div>
                 <button
                     onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
