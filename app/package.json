@@ -7,7 +7,7 @@
     "dev": "vite",
     "copy-files": "copyfiles \"src/**/*.gql\" dist .env* dist",
     "generate": "graphql-codegen",
-    "build": "npm run generate && run copy-files && tsc -b && vite build",
+    "build": "npm run generate && npm run copy-files && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
