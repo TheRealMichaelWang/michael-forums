@@ -5,25 +5,27 @@ import { SignedIn, SignedOut, UserButton, SignInButton, SignOutButton, SignUpBut
 
 const Header: React.FC = () => {
     return (
-    <header>
-        <nav>
-            <Link to="/">Home</Link>
-        </nav>
-        <div>
-            <SignedIn>
-                <UserButton/>
-                <SignOutButton>
-                    <button>Log Out</button>
-                </SignOutButton>
-            </SignedIn>
-            <SignedOut>
-                <SignInButton mode="modal">
-                    <button>Log In</button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                    <button>Sign Up</button>
-                </SignUpButton>
-            </SignedOut>
+    <header className='header'>
+        <div className='header-inner'>
+            <nav>
+                <Link to="/" className="button-accent">Home</Link>
+            </nav>
+            <div className='header-actions'>
+                <SignedIn>
+                    <UserButton/>
+                    <SignOutButton>
+                        <button className="button-accent">Log Out</button>
+                    </SignOutButton>
+                </SignedIn>
+                <SignedOut>
+                    <SignInButton mode="modal">
+                        <button className="button-accent">Log In</button>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                        <button className="button-accent">Sign Up</button>
+                    </SignUpButton>
+                </SignedOut>
+            </div>
         </div>
     </header>
     );

@@ -25,7 +25,7 @@ const ForumPage: React.FC = () => {
     const hasNextPage = forum.posts.length === pageSize;
 
     return (
-        <div>
+        <div className="list">
             <h1>{forum.title}</h1>
             <h2>{forum.about}</h2>
             <SignedIn>

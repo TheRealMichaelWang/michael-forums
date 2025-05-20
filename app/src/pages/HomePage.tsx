@@ -19,26 +19,28 @@ const HomePage: React.FC = () => {
     const hasNextPage = forums.length === pageSize; // check if there are more forums to load
 
     return (
-        <div>
-            <h1>Forums</h1>
+        <div className="list">
+            <h1 className="header-title">Forums</h1>
             <ul>
                 {forums.map((forum) => (
-                <li key={forum.id}>
+                <li key={forum.id} className="item">
                     <Link to={`/forums/${forum.id}`}>
-                    <h2>{forum.title}</h2>
-                    <p>{forum.about}</p>
+                        <h2 className="item-title">{forum.title}</h2>
                     </Link>
+                    <p className="item-about">{forum.about}</p>
                 </li>
                 ))}
             </ul>
-            <div>
+            <div className="pagination">
                 <button
+                    className="pagination-button"
                     onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
                 >
                     Previous
                 </button>
                 <button
+                    className="pagination-button"
                     onClick={() => setCurrentPage(currentPage + 1)}
                     disabled={!hasNextPage}
                 >
