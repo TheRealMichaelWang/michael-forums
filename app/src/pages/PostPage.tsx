@@ -1,38 +1,39 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { useGetForumQuery } from "../generated/graphql";
+import { useGetPostQuery } from "../generated/graphql";
 
-const ForumPage: React.FC = () => {
+const PostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [currentPage, setCurrentPage] = React.useState(1);
-    const pageSize = 10; // number of posts to display per page; hardcoded for now
+    const pageSize = 10; // number of comments to display per page; hardcoded for now
 
-    if (!id) { return <p>Forum ID is required</p>;}
+    if (!id) { return <p>Post ID is required</p>; }
 
     // useQuery hook to execute the GraphQL query
-    const { loading, error, data } = useGetForumQuery({
+    const { loading, error, data } = useGetPostQuery({
         variables: { id: id, currentPage: currentPage, pageSize: pageSize },
     });
-
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
-    const forum = data?.messageQuery?.getForum;
-    if (!forum) {
-        return <p>Forum not found</p>;
+    const post = data?.messageQuery?.getPost;
+    if (!post) {
+        return <p>Post not found</p>;
     }
-    const hasNextPage = forum.posts.length === pageSize;
+    const hasNextPage = post.replies.length === pageSize;
 
     return (
         <div>
-            <h1>{forum.title}</h1>
-            <h2>{forum.about}</h2>
+            <h1>{post.title}</h1>
+            <h2>By {post.authorName ?? "Deleted User"}</h2>
+            <p>{post.content}</p>
+            <h2>Replies</h2>
             <ul>
-                {forum.posts.map((post) => (
-                    <li key={post.id}>
-                        <Link to={`//${post.id}`}>
-                            <h3>{post.title}</h3>
-                            <p>By {post.authorName ?? "Deleted User"}</p>
+                {post.replies.map((reply) => (
+                    <li key={reply.id}>
+                        <Link to={`/${reply.id}`}>
+                            <h3>{reply.content}</h3>
+                            <p>By {reply.authorName ?? "Deleted User"}</p>
                         </Link>
                     </li>
                 ))}
@@ -55,4 +56,4 @@ const ForumPage: React.FC = () => {
     )
 }
 
-export default ForumPage;
+export default PostPage;

@@ -220,6 +220,15 @@ export type GetForumQueryVariables = Exact<{
 
 export type GetForumQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getForum: { __typename?: 'Forum', id: string, title: string, about: string, posts: Array<{ __typename?: 'Post', id: string, title: string, authorName?: string | null }> } } | null };
 
+export type GetPostQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  currentPage: Scalars['Int']['input'];
+  pageSize: Scalars['Int']['input'];
+}>;
+
+
+export type GetPostQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getPost: { __typename?: 'Post', id: string, title: string, content: string, authorName?: string | null, replies: Array<{ __typename?: 'Reply', id: string, content: string, authorName?: string | null }> } } | null };
+
 
 export const GetForumsDocument = gql`
     query GetForums($currentPage: Int!, $pageSize: Int!) {
@@ -317,3 +326,55 @@ export type GetForumQueryHookResult = ReturnType<typeof useGetForumQuery>;
 export type GetForumLazyQueryHookResult = ReturnType<typeof useGetForumLazyQuery>;
 export type GetForumSuspenseQueryHookResult = ReturnType<typeof useGetForumSuspenseQuery>;
 export type GetForumQueryResult = Apollo.QueryResult<GetForumQuery, GetForumQueryVariables>;
+export const GetPostDocument = gql`
+    query GetPost($id: ID!, $currentPage: Int!, $pageSize: Int!) {
+  messageQuery {
+    getPost(id: $id) {
+      id
+      title
+      content
+      authorName
+      replies(currentPage: $currentPage, pageSize: $pageSize) {
+        id
+        content
+        authorName
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPostQuery__
+ *
+ * To run a query within a React component, call `useGetPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      currentPage: // value for 'currentPage'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useGetPostQuery(baseOptions: Apollo.QueryHookOptions<GetPostQuery, GetPostQueryVariables> & ({ variables: GetPostQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
+      }
+export function useGetPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
+        }
+export function useGetPostSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
+        }
+export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
+export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
+export type GetPostSuspenseQueryHookResult = ReturnType<typeof useGetPostSuspenseQuery>;
+export type GetPostQueryResult = Apollo.QueryResult<GetPostQuery, GetPostQueryVariables>;
