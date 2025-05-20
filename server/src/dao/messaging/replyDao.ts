@@ -27,7 +27,7 @@ export class ReplyDao {
 
     //Create a new reply.
     //The reply is associated with a post and an author.
-    public async createReply(content: string, postId: string, authorId: string): Promise<Reply> {
+    public async createReply(postId: string, content: string, authorId: string): Promise<Reply> {
         return this.prisma.reply.create({
             data: {
                 content: content,

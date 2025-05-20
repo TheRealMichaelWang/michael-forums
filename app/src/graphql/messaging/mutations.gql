@@ -5,3 +5,11 @@ mutation CreatePost($forumId: ID!, $title: String!, $content: String!) {
     }
   }
 }
+
+mutation CreateReply($postId: ID!, $content: String!) {
+  messageMutation {
+    createReply(postId: $postId, content: $content) {
+      id
+    }
+  }
+}

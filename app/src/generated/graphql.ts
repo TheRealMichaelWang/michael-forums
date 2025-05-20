@@ -212,6 +212,14 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', createPost: { __typename?: 'Post', id: string } } | null };
 
+export type CreateReplyMutationVariables = Exact<{
+  postId: Scalars['ID']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type CreateReplyMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', createReply: { __typename?: 'Reply', id: string } } | null };
+
 export type GetForumsQueryVariables = Exact<{
   currentPage: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
@@ -276,6 +284,42 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const CreateReplyDocument = gql`
+    mutation CreateReply($postId: ID!, $content: String!) {
+  messageMutation {
+    createReply(postId: $postId, content: $content) {
+      id
+    }
+  }
+}
+    `;
+export type CreateReplyMutationFn = Apollo.MutationFunction<CreateReplyMutation, CreateReplyMutationVariables>;
+
+/**
+ * __useCreateReplyMutation__
+ *
+ * To run a mutation, you first call `useCreateReplyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReplyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReplyMutation, { data, loading, error }] = useCreateReplyMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useCreateReplyMutation(baseOptions?: Apollo.MutationHookOptions<CreateReplyMutation, CreateReplyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateReplyMutation, CreateReplyMutationVariables>(CreateReplyDocument, options);
+      }
+export type CreateReplyMutationHookResult = ReturnType<typeof useCreateReplyMutation>;
+export type CreateReplyMutationResult = Apollo.MutationResult<CreateReplyMutation>;
+export type CreateReplyMutationOptions = Apollo.BaseMutationOptions<CreateReplyMutation, CreateReplyMutationVariables>;
 export const GetForumsDocument = gql`
     query GetForums($currentPage: Int!, $pageSize: Int!) {
   messageQuery {
