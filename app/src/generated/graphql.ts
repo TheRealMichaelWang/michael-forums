@@ -100,13 +100,25 @@ export type MessageMutationEditReplyArgs = {
 
 export type MessageQuery = {
   __typename?: 'MessageQuery';
+  getForum: Forum;
   getForums: Array<Forum>;
+  getPost: Post;
+};
+
+
+export type MessageQueryGetForumArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
 export type MessageQueryGetForumsArgs = {
   currentPage: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+};
+
+
+export type MessageQueryGetPostArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type Post = {
@@ -143,10 +155,7 @@ export type RootMutation = {
 
 export type RootQuery = {
   __typename?: 'RootQuery';
-  forum?: Maybe<Forum>;
   messageQuery?: Maybe<MessageQuery>;
-  post?: Maybe<Post>;
-  user?: Maybe<User>;
   userQuery?: Maybe<UserQuery>;
 };
 
@@ -202,6 +211,15 @@ export type GetForumsQueryVariables = Exact<{
 
 export type GetForumsQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getForums: Array<{ __typename?: 'Forum', id: string, title: string, about: string }> } | null };
 
+export type GetForumQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  currentPage: Scalars['Int']['input'];
+  pageSize: Scalars['Int']['input'];
+}>;
+
+
+export type GetForumQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getForum: { __typename?: 'Forum', id: string, title: string, about: string, posts: Array<{ __typename?: 'Post', id: string, title: string, authorName?: string | null }> } } | null };
+
 
 export const GetForumsDocument = gql`
     query GetForums($currentPage: Int!, $pageSize: Int!) {
@@ -248,3 +266,54 @@ export type GetForumsQueryHookResult = ReturnType<typeof useGetForumsQuery>;
 export type GetForumsLazyQueryHookResult = ReturnType<typeof useGetForumsLazyQuery>;
 export type GetForumsSuspenseQueryHookResult = ReturnType<typeof useGetForumsSuspenseQuery>;
 export type GetForumsQueryResult = Apollo.QueryResult<GetForumsQuery, GetForumsQueryVariables>;
+export const GetForumDocument = gql`
+    query GetForum($id: ID!, $currentPage: Int!, $pageSize: Int!) {
+  messageQuery {
+    getForum(id: $id) {
+      id
+      title
+      about
+      posts(currentPage: $currentPage, pageSize: $pageSize) {
+        id
+        title
+        authorName
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetForumQuery__
+ *
+ * To run a query within a React component, call `useGetForumQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      currentPage: // value for 'currentPage'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useGetForumQuery(baseOptions: Apollo.QueryHookOptions<GetForumQuery, GetForumQueryVariables> & ({ variables: GetForumQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetForumQuery, GetForumQueryVariables>(GetForumDocument, options);
+      }
+export function useGetForumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetForumQuery, GetForumQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetForumQuery, GetForumQueryVariables>(GetForumDocument, options);
+        }
+export function useGetForumSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetForumQuery, GetForumQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetForumQuery, GetForumQueryVariables>(GetForumDocument, options);
+        }
+export type GetForumQueryHookResult = ReturnType<typeof useGetForumQuery>;
+export type GetForumLazyQueryHookResult = ReturnType<typeof useGetForumLazyQuery>;
+export type GetForumSuspenseQueryHookResult = ReturnType<typeof useGetForumSuspenseQuery>;
+export type GetForumQueryResult = Apollo.QueryResult<GetForumQuery, GetForumQueryVariables>;
