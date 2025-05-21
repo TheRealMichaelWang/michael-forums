@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useGetPostQuery, useCreateReplyMutation } from "../generated/graphql";
+import UserLabel from "../components/UserLabel";
 
 const PostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -46,19 +47,14 @@ const PostPage: React.FC = () => {
     return (
         <div className="list">
             <h1 className="title">{post.title}</h1>
-            <h2 className="item-about">By {post.authorName ?? "Deleted User"}</h2>
+            <h2><UserLabel userId={post.authorId} username={post.authorName}/></h2>
             <p>{post.content}</p>
             <h2 className="subtitle">Replies</h2>
             <ul>
                 {post.replies.map((reply) => (
                     <li key={reply.id} className="item">
                         <h3>{reply.content}</h3>
-                        {reply.authorId ? 
-                            (<Link to={`/users/${reply.authorId}`}>
-                                <p className="item-about">By {reply.authorName}</p>
-                            </Link>) 
-                            : (<p className="item-about">By Deleted User</p>)
-                        }
+                        <UserLabel userId={reply.authorId} username={reply.authorName}/>
                     </li>
                 ))}
             </ul>

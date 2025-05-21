@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useGetForumQuery } from "../generated/graphql";
 import { SignedIn } from "@clerk/clerk-react";
+import UserLabel from "../components/UserLabel";
 
 const ForumPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -37,8 +38,8 @@ const ForumPage: React.FC = () => {
                 {forum.posts.map((post) => (
                     <li key={post.id} className="item">
                         <Link to={`/posts/${post.id}`}>
-                            <h3 className="item-title">{post.title}</h3>
-                            <p className="item-about">By {post.authorName ?? "Deleted User"}</p>
+                            <h3 className="item-title">{post.title}</h3> 
+                            <UserLabel userId={post.authorId} username={post.authorName}/>
                         </Link>
                     </li>
                 ))}
