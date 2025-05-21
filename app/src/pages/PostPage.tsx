@@ -109,7 +109,9 @@ const PostPage: React.FC = () => {
                     <button type="button" className="button-secondary" onClick={() => setEditingPost(false)}>Cancel</button>
                 {editPostError && <span style={{ color: "red" }}>Error: {editPostError.message}</span>}
                 </form>
-            ) : (<span>{marked.parse(post.content, { breaks: true})}</span>)}
+            ) : (<span
+              dangerouslySetInnerHTML={{ __html: marked.parse(post.content, { breaks: true }) }}
+            />)}
 
             {user_id === post.authorId && !editingPost && (
                 <button className="button-secondary ml-2" onClick={() => {
@@ -124,7 +126,9 @@ const PostPage: React.FC = () => {
             <ul>
                 {post.replies.map((reply) => (
                     <li key={reply.id} className="item">
-                        <span>{marked.parse(reply.content, { breaks: true })}</span>
+                        <span
+                            dangerouslySetInnerHTML={{ __html: marked.parse(reply.content, { breaks: true }) }}
+                        />
                         <div>
                             <UserLabel userId={reply.authorId} username={reply.authorName}/>
                             <DateTimeLabel obj={reply}/>
