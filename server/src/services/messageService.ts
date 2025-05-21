@@ -5,6 +5,7 @@ import { AuthorizationService } from "./authorizationService";
 import { injectable, inject } from "inversify";
 import { logger } from "../util/logger";
 import { UserDao } from "../dao/user/userDao";
+import DOMPurify from "dompurify";
 
 @injectable()
 export class MessageService {
@@ -59,7 +60,7 @@ export class MessageService {
             throw new Error("User is not authorized to create a forum.");
         }
         logger.info(`Creating forum with title: ${title} and about: ${about} by user: ${userId}`);
-        return await this.forumDao.createForum(title, about);
+        return await this.forumDao.createForum(DOMPurify.sanitize(title), DOMPurify.sanitize(about));
     }
 
     public async editForum(id: string, title: string, about: string, userId?: string) {
@@ -68,7 +69,7 @@ export class MessageService {
             throw new Error("User is not authorized to edit a forum.");
         }
         logger.info(`Editing forum with id: ${id}, new title: ${title}, new about: ${about} by user: ${userId}`);
-        return await this.forumDao.updateForum(id, title, about);
+        return await this.forumDao.updateForum(id, DOMPurify.sanitize(title), DOMPurify.sanitize(about));
     }
 
     public async deleteForum(id: string, userId?: string) {
@@ -86,7 +87,7 @@ export class MessageService {
             throw new Error("User is not authorized to create a post; user must be logged in.");
         }
         logger.info(`Creating post in forum with id: ${forumId}, title: ${title}, content: ${content} by user: ${userId}`);
-        return await this.postDao.createPost(forumId, title, content, userId!);
+        return await this.postDao.createPost(forumId, DOMPurify.sanitize(title), DOMPurify.sanitize(content), userId!);
     }
 
     public async editPost(id: string, title: string, content: string, userId?: string) {
@@ -95,7 +96,7 @@ export class MessageService {
             throw new Error("User is not authorized to edit this post.");
         }
         logger.info(`Editing post with id: ${id}, new title: ${title}, new content: ${content} by user: ${userId}`);
-        return await this.postDao.updatePost(id, title, content);
+        return await this.postDao.updatePost(id, DOMPurify.sanitize(title), DOMPurify.sanitize(content));
     }
 
     public async deletePost(id: string, userId?: string) {
@@ -113,7 +114,7 @@ export class MessageService {
             throw new Error("User is not authorized to create a reply; user must be logged in.");
         }
         logger.info(`Creating reply to post with id: ${postId}, content: ${content} by user: ${userId}`);
-        return await this.replyDao.createReply(postId, content, userId!);
+        return await this.replyDao.createReply(postId, DOMPurify.sanitize(content), userId!);
     }
 
     public async editReply(id: string, content: string, userId?: string) {
@@ -122,7 +123,7 @@ export class MessageService {
             throw new Error("User is not authorized to edit this reply.");
         }
         logger.info(`Editing reply with id: ${id}, new content: ${content} by user: ${userId}`);
-        return await this.replyDao.updateReply(id, content);
+        return await this.replyDao.updateReply(id, DOMPurify.sanitize(content));
     }
 
     public async deleteReply(id: string, userId?: string) {
