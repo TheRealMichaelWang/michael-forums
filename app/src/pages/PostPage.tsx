@@ -44,23 +44,43 @@ const PostPage: React.FC = () => {
 
 
     return (
-        <div>
-            <h1>{post.title}</h1>
-            <h2>By {post.authorName ?? "Deleted User"}</h2>
+        <div className="list">
+            <h1 className="title">{post.title}</h1>
+            <h2 className="item-about">By {post.authorName ?? "Deleted User"}</h2>
             <p>{post.content}</p>
-            <h2>Replies</h2>
+            <h2 className="subtitle">Replies</h2>
             <ul>
                 {post.replies.map((reply) => (
-                    <li key={reply.id}>
+                    <li key={reply.id} className="item">
                         <h3>{reply.content}</h3>
-                        <Link to={`/users/${reply.id}`}>
-                            <p>By {reply.authorName ?? "Deleted User"}</p>
-                        </Link>
+                        {reply.authorId ? 
+                            (<Link to={`/users/${reply.authorId}`}>
+                                <p className="item-about">By {reply.authorName}</p>
+                            </Link>) 
+                            : (<p className="item-about">By Deleted User</p>)
+                        }
                     </li>
                 ))}
             </ul>
+            <div className="pagination mb-8">
+                <button
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="pagination-button"
+                >
+                    Previous
+                </button>
+                <button
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={!hasNextPage}
+                    className="pagination-button"
+                >
+                    Next
+                </button>
+            </div>
             <form onSubmit={handleReplySubmit}>
                 <textarea
+                    className="textarea"
                     value={replyContent}
                     onChange={e => setReplyContent(e.target.value)}
                     placeholder="Write your reply..."
@@ -68,29 +88,15 @@ const PostPage: React.FC = () => {
                     rows={3}
                     style={{ width: "100%" }}
                 />
-                <button type="submit" disabled={replyLoading || !replyContent.trim()}>
+                <button type="submit" disabled={replyLoading || !replyContent.trim()} className="button-primary">
                     {replyLoading ? "Posting..." : "Post Reply"}
                 </button>
                 {replyError && <p style={{ color: "red" }}>Error: {replyError.message}</p>}
             </form>
             <div>
-                <Link to={`/forums/${post.forumId}`}>
+                <Link to={`/forums/${post.forumId}`} className="button-primary my-2 inline-block mx-auto">
                     Back to Forum
                 </Link>
-            </div>
-            <div>
-                <button
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                <button
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={!hasNextPage}
-                >
-                    Next
-                </button>
             </div>
         </div>
     )

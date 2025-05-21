@@ -235,7 +235,7 @@ export type GetForumQueryVariables = Exact<{
 }>;
 
 
-export type GetForumQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getForum: { __typename?: 'Forum', id: string, title: string, about: string, posts: Array<{ __typename?: 'Post', id: string, title: string, authorName?: string | null }> } } | null };
+export type GetForumQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getForum: { __typename?: 'Forum', id: string, title: string, about: string, posts: Array<{ __typename?: 'Post', id: string, title: string, authorName?: string | null, authorId?: string | null }> } } | null };
 
 export type GetPostQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -244,7 +244,7 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getPost: { __typename?: 'Post', id: string, title: string, content: string, authorName?: string | null, forumId: string, replies: Array<{ __typename?: 'Reply', id: string, content: string, authorName?: string | null }> } } | null };
+export type GetPostQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getPost: { __typename?: 'Post', id: string, title: string, content: string, authorName?: string | null, authorId?: string | null, forumId: string, replies: Array<{ __typename?: 'Reply', id: string, content: string, authorName?: string | null, authorId?: string | null }> } } | null };
 
 
 export const CreatePostDocument = gql`
@@ -376,6 +376,7 @@ export const GetForumDocument = gql`
         id
         title
         authorName
+        authorId
       }
     }
   }
@@ -424,11 +425,13 @@ export const GetPostDocument = gql`
       title
       content
       authorName
+      authorId
       forumId
       replies(currentPage: $currentPage, pageSize: $pageSize) {
         id
         content
         authorName
+        authorId
       }
     }
   }

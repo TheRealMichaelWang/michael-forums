@@ -26,7 +26,7 @@ const ForumPage: React.FC = () => {
 
     return (
         <div className="list">
-            <h1 className="header-title">{forum.title}</h1>
+            <h1 className="title">{forum.title}</h1>
             <h2>{forum.about}</h2>
             <SignedIn>
                 <Link to={`/create-post/${forum.id}`} className="button-primary my-2 inline-block mx-auto">

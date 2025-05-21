@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
 
     return (
         <div className="list">
-            <h1 className="header-title">Forums</h1>
+            <h1 className="title">Forums</h1>
             <ul>
                 {forums.map((forum) => (
                 <li key={forum.id} className="item">
