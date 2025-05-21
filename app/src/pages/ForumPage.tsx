@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useGetForumQuery } from "../generated/graphql";
 import { SignedIn } from "@clerk/clerk-react";
 import UserLabel from "../components/UserLabel";
+import PaginationStrip from "../components/PaginationStrip";
 
 const ForumPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -23,7 +24,6 @@ const ForumPage: React.FC = () => {
     if (!forum) {
         return <p>Forum not found</p>;
     }
-    const hasNextPage = forum.posts.length === pageSize;
 
     return (
         <div className="list">
@@ -43,23 +43,8 @@ const ForumPage: React.FC = () => {
                         </Link>
                     </li>
                 ))}
-            </ul>
-            <div className="pagination">
-                <button
-                    className="pagination-button"
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                <button
-                    className="pagination-button"
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={!hasNextPage}
-                >
-                    Next
-                </button>
-            </div>
+            </ul>            
+            <PaginationStrip pageSize={pageSize} elements_displayed={forum.posts.length} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
         </div>
     )
 }

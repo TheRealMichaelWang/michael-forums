@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useGetForumsQuery } from "../generated/graphql";
+import PaginationStrip from "../components/PaginationStrip";
 
 // HomePage component fetches and displays a list of forums
 const HomePage: React.FC = () => {
@@ -16,11 +17,10 @@ const HomePage: React.FC = () => {
     if (error) return <p>Error: {error.message}</p>;
 
     const forums = data?.messageQuery?.getForums || [];
-    const hasNextPage = forums.length === pageSize; // check if there are more forums to load
-
+    
     return (
         <div className="list">
-            <h1 className="title">Forums</h1>
+            <h1 className="title">Welcome to Michael Forums!</h1>
             <ul>
                 {forums.map((forum) => (
                 <li key={forum.id} className="item">
@@ -31,22 +31,7 @@ const HomePage: React.FC = () => {
                 </li>
                 ))}
             </ul>
-            <div className="pagination">
-                <button
-                    className="pagination-button"
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                <button
-                    className="pagination-button"
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={!hasNextPage}
-                >
-                    Next
-                </button>
-            </div>
+            <PaginationStrip pageSize={pageSize} elements_displayed={forums.length} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
         </div>
     );
 };

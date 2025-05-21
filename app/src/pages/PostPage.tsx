@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useGetPostQuery, useCreateReplyMutation } from "../generated/graphql";
 import UserLabel from "../components/UserLabel";
+import PaginationStrip from "../components/PaginationStrip";
 
 const PostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -24,7 +25,6 @@ const PostPage: React.FC = () => {
     if (!post) {
         return <p>Post not found</p>;
     }
-    const hasNextPage = post.replies.length === pageSize;
 
     const handleReplySubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -58,22 +58,7 @@ const PostPage: React.FC = () => {
                     </li>
                 ))}
             </ul>
-            <div className="pagination mb-8">
-                <button
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="pagination-button"
-                >
-                    Previous
-                </button>
-                <button
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={!hasNextPage}
-                    className="pagination-button"
-                >
-                    Next
-                </button>
-            </div>
+            <PaginationStrip pageSize={pageSize} elements_displayed={post.replies.length} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
             <form onSubmit={handleReplySubmit}>
                 <textarea
                     className="textarea"
