@@ -4,6 +4,7 @@ import { useGetPostQuery, useCreateReplyMutation } from "../generated/graphql";
 import UserLabel from "../components/UserLabel";
 import PaginationStrip from "../components/PaginationStrip";
 import { SignedIn } from "@clerk/clerk-react";
+import DateTimeLabel from "../components/DateTimeLabel";
 
 const PostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -44,11 +45,11 @@ const PostPage: React.FC = () => {
         }
     };
 
-
     return (
         <div className="list">
             <h1 className="title">{post.title}</h1>
             <h2><UserLabel userId={post.authorId} username={post.authorName}/></h2>
+            <DateTimeLabel obj={post}/>
             <p>{post.content}</p>
             <h2 className="subtitle">Replies</h2>
             <ul>
@@ -56,6 +57,7 @@ const PostPage: React.FC = () => {
                     <li key={reply.id} className="item">
                         <h3>{reply.content}</h3>
                         <UserLabel userId={reply.authorId} username={reply.authorName}/>
+                        <DateTimeLabel obj={reply}/>
                     </li>
                 ))}
             </ul>

@@ -19,6 +19,8 @@ query GetForum($id: ID!, $currentPage: Int!, $pageSize: Int!) {
         title
         authorName
         authorId
+        createdAt
+        updatedAt
       }
     }
   }
@@ -33,12 +35,16 @@ query GetPost($id: ID!, $currentPage: Int!, $pageSize: Int!) {
       authorName
       authorId
       forumId
+      createdAt
+      updatedAt
 
       replies(currentPage: $currentPage, pageSize: $pageSize) {
         id
         content
         authorName
         authorId
+        createdAt
+        updatedAt
       }
     }
   }

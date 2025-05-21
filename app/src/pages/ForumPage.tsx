@@ -4,6 +4,7 @@ import { useGetForumQuery } from "../generated/graphql";
 import { SignedIn } from "@clerk/clerk-react";
 import UserLabel from "../components/UserLabel";
 import PaginationStrip from "../components/PaginationStrip";
+import DateTimeLabel from "../components/DateTimeLabel";
 
 const ForumPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -39,8 +40,9 @@ const ForumPage: React.FC = () => {
                     <li key={post.id} className="item">
                         <Link to={`/posts/${post.id}`}>
                             <h3 className="item-title">{post.title}</h3> 
-                            <UserLabel userId={post.authorId} username={post.authorName}/>
                         </Link>
+                        <UserLabel userId={post.authorId} username={post.authorName}/>
+                        <DateTimeLabel obj={post}/>
                     </li>
                 ))}
             </ul>            

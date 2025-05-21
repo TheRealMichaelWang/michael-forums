@@ -15,14 +15,17 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
 
 export type Forum = {
   __typename?: 'Forum';
   about: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   posts: Array<Post>;
   title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 
@@ -126,10 +129,12 @@ export type Post = {
   authorId?: Maybe<Scalars['ID']['output']>;
   authorName?: Maybe<Scalars['String']['output']>;
   content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
   forumId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
   replies: Array<Reply>;
   title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 
@@ -143,8 +148,10 @@ export type Reply = {
   authorId?: Maybe<Scalars['ID']['output']>;
   authorName?: Maybe<Scalars['String']['output']>;
   content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   postId: Scalars['ID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type RootMutation = {
@@ -161,10 +168,12 @@ export type RootQuery = {
 
 export type User = {
   __typename?: 'User';
+  createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   isAdmin: Scalars['Boolean']['output'];
   posts: Array<Post>;
+  updatedAt: Scalars['DateTime']['output'];
   username: Scalars['String']['output'];
 };
 
@@ -235,7 +244,7 @@ export type GetForumQueryVariables = Exact<{
 }>;
 
 
-export type GetForumQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getForum: { __typename?: 'Forum', id: string, title: string, about: string, posts: Array<{ __typename?: 'Post', id: string, title: string, authorName?: string | null, authorId?: string | null }> } } | null };
+export type GetForumQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getForum: { __typename?: 'Forum', id: string, title: string, about: string, posts: Array<{ __typename?: 'Post', id: string, title: string, authorName?: string | null, authorId?: string | null, createdAt: any, updatedAt: any }> } } | null };
 
 export type GetPostQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -244,7 +253,7 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getPost: { __typename?: 'Post', id: string, title: string, content: string, authorName?: string | null, authorId?: string | null, forumId: string, replies: Array<{ __typename?: 'Reply', id: string, content: string, authorName?: string | null, authorId?: string | null }> } } | null };
+export type GetPostQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getPost: { __typename?: 'Post', id: string, title: string, content: string, authorName?: string | null, authorId?: string | null, forumId: string, createdAt: any, updatedAt: any, replies: Array<{ __typename?: 'Reply', id: string, content: string, authorName?: string | null, authorId?: string | null, createdAt: any, updatedAt: any }> } } | null };
 
 
 export const CreatePostDocument = gql`
@@ -377,6 +386,8 @@ export const GetForumDocument = gql`
         title
         authorName
         authorId
+        createdAt
+        updatedAt
       }
     }
   }
@@ -427,11 +438,15 @@ export const GetPostDocument = gql`
       authorName
       authorId
       forumId
+      createdAt
+      updatedAt
       replies(currentPage: $currentPage, pageSize: $pageSize) {
         id
         content
         authorName
         authorId
+        createdAt
+        updatedAt
       }
     }
   }
