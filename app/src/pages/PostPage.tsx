@@ -19,6 +19,7 @@ const PostPage: React.FC = () => {
     const [editPost, { loading: editPostLoading, error: editPostError}] = useEditPostMutation();
     const [editingPost, setEditingPost] = React.useState(false);
     //const [editingReplyId, setEditingReplyId] = React.useState<string | null>(null);
+    const [editTitle, setEditTitle] = React.useState("");
     const [editContent, setEditContent] = React.useState("");
 
     const { isLoaded, isSignedIn } = useAuth();
@@ -69,13 +70,13 @@ const PostPage: React.FC = () => {
 
     const handleEditPost = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!editContent.trim()) {
+        if (!editContent.trim() || !editTitle.trim()) {
             return;
         }
 
         try{
             const {data} = await editPost({
-                variables: { id: id, title: post.title, content: editContent}
+                variables: { id: id, title: editTitle, content: editContent}
             })
 
             if (data?.messageMutation?.editPost) {
@@ -97,13 +98,19 @@ const PostPage: React.FC = () => {
 
             {editingPost ? (
                 <form onSubmit={handleEditPost}>
+                    <input
+                        className="textarea"
+                        type="text"
+                        value={editTitle}
+                        onChange={e => setEditTitle(e.target.value)}
+                    />
                     <textarea
                         className="textarea"
                         value={editContent}
                         onChange={e => setEditContent(e.target.value)}
                         rows={3}
                     />
-                    <button type="submit" disabled={editPostLoading || !editContent.trim()} className="button-primary mr-2">
+                    <button type="submit" disabled={editPostLoading || !editContent.trim() || !editTitle.trim()} className="button-primary mr-2">
                         {editPostLoading ? "Saving edits..." : "Save"}
                     </button>
                     <button type="button" className="button-secondary" onClick={() => setEditingPost(false)}>Cancel</button>
@@ -117,6 +124,7 @@ const PostPage: React.FC = () => {
                 <button className="button-secondary ml-2" onClick={() => {
                     setEditingPost(true);
                     setEditContent(post.content);
+                    setEditTitle(post.title);
                 }}>
                     Edit
                 </button>

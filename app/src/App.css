@@ -22,15 +22,15 @@
 }
 
 .button-primary {
-  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition;
+  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed; 
 }
 
 .button-secondary {
-  @apply bg-white text-blue-700 px-3 py-1 rounded hover:bg-blue-100 transition;
+  @apply bg-white text-blue-700 px-3 py-1 rounded hover:bg-blue-100 transition disabled:bg-gray-300 disabled:cursor-not-allowed;
 }
 
 .button-accent {
-  @apply bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition;
+  @apply bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition disabled:bg-gray-300 disabled:cursor-not-allowed;
 }
 
 .list {
