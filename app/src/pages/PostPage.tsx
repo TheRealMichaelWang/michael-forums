@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "@clerk/clerk-react";
-import { Link, useParams } from "react-router-dom";
-import { useGetPostQuery, useCreateReplyMutation, useGetCurrentUserQuery, useEditPostMutation } from "../generated/graphql";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useGetPostQuery, useCreateReplyMutation, useGetCurrentUserQuery, useEditPostMutation, useDeletePostMutation } from "../generated/graphql";
 import UserLabel from "../components/UserLabel";
 import PaginationStrip from "../components/PaginationStrip";
 import { SignedIn } from "@clerk/clerk-react";
@@ -21,8 +21,13 @@ const PostPage: React.FC = () => {
     //const [editingReplyId, setEditingReplyId] = React.useState<string | null>(null);
     const [editTitle, setEditTitle] = React.useState("");
     const [editContent, setEditContent] = React.useState("");
+    const [editPostErrorMessage, setEditPostErrorMessage] = React.useState<string | null>(null);
+
+    const [deletePost, { loading: deletePostLoading, error: deletePostError}] = useDeletePostMutation();
+    const [deleteErrorMsg, setDeleteErrorMsg] = React.useState<string | null>(null);
 
     const { isLoaded, isSignedIn } = useAuth();
+    const navigate = useNavigate();
 
     // useQuery hook to execute the GraphQL query
     const { loading, error, data, refetch } = useGetPostQuery({
@@ -38,6 +43,7 @@ const PostPage: React.FC = () => {
     const user_id = user_data?.userQuery?.me?.id;
     
     if (!isLoaded || loading || user_loading) return <p>Loading...</p>;
+    if (deletePostLoading) return <p>Deleting Post...</p>
     if (error) return <p>Error: {error.message}</p>;
     if (!id) { return <p>Post ID is required</p>; }
 
@@ -63,9 +69,7 @@ const PostPage: React.FC = () => {
                 refetch(); // Refresh replies
                 user_refetch();
             }
-        } catch (err) {
-            // Error will be shown below
-        }
+        } catch { }
     };
 
     const handleEditPost = async (e: React.FormEvent) => {
@@ -84,10 +88,29 @@ const PostPage: React.FC = () => {
                 refetch(); // Refresh replies
                 user_refetch();
             }
+            else {
+                setEditPostErrorMessage("You do not have permission to edit this post.");
+            }
         }
-        catch{
+        catch { }
+    }
 
+    const handleDeletePost = async () => {
+        const confirmed = window.confirm("Are you sure you want to delete this post? The post will be deleted permanently.");
+        if (!confirmed) return;
+
+        try {
+            const {data} = await deletePost({
+                variables: { id: id }
+            })
+            if (data?.messageMutation?.deletePost) {
+                navigate(`/forums/${post.forumId}`);
+            }
+            else {
+                setDeleteErrorMsg("You do not have permission to delete this post!");
+            }
         }
+        catch { }
     }
 
     return (
@@ -114,20 +137,39 @@ const PostPage: React.FC = () => {
                         {editPostLoading ? "Saving edits..." : "Save"}
                     </button>
                     <button type="button" className="button-secondary" onClick={() => setEditingPost(false)}>Cancel</button>
-                {editPostError && <span style={{ color: "red" }}>Error: {editPostError.message}</span>}
+                { (editPostError || editPostErrorMessage) && 
+                    <span style={{ color: "red" }}>
+                        Error: {editPostError?.message || editPostErrorMessage}
+                    </span>
+                }
                 </form>
-            ) : (<span
-              dangerouslySetInnerHTML={{ __html: marked.parse(post.content, { breaks: true }) }}
-            />)}
+            ) : 
+            (<>
+                <span
+                    dangerouslySetInnerHTML={{ __html: marked.parse(post.content, { breaks: true }) }}
+                />
+                
+                {(deletePostError || deleteErrorMsg) && (
+                    <span style={{ color: "red" }}>
+                        Error: {deletePostError?.message || deleteErrorMsg}
+                    </span>
+                )}
+            </>)}
 
             {user_id === post.authorId && !editingPost && (
-                <button className="button-secondary ml-2" onClick={() => {
-                    setEditingPost(true);
-                    setEditContent(post.content);
-                    setEditTitle(post.title);
-                }}>
-                    Edit
-                </button>
+                <div>
+                    <button className="button-secondary" onClick={() => {
+                        setEditingPost(true);
+                        setEditContent(post.content);
+                        setEditTitle(post.title);
+                    }}>
+                        Edit
+                    </button>
+
+                    <button className="button-secondary" onClick={handleDeletePost}>
+                        Delete
+                    </button>
+                </div>
             )}
 
             <h2 className="subtitle">Replies</h2>
