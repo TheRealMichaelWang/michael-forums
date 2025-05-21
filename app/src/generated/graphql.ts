@@ -204,7 +204,7 @@ export type UserMutationMockRegisterArgs = {
 export type UserQuery = {
   __typename?: 'UserQuery';
   getUser: User;
-  me: User;
+  me?: Maybe<User>;
 };
 
 
@@ -221,6 +221,22 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', createPost: { __typename?: 'Post', id: string } } | null };
 
+export type EditPostMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  title: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type EditPostMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', editPost: boolean } | null };
+
+export type DeletePostMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', deletePost: boolean } | null };
+
 export type CreateReplyMutationVariables = Exact<{
   postId: Scalars['ID']['input'];
   content: Scalars['String']['input'];
@@ -228,6 +244,21 @@ export type CreateReplyMutationVariables = Exact<{
 
 
 export type CreateReplyMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', createReply: { __typename?: 'Reply', id: string } } | null };
+
+export type EditReplyMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type EditReplyMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', editReply: boolean } | null };
+
+export type DeleteReplyMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteReplyMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', deleteReply: boolean } | null };
 
 export type GetForumsQueryVariables = Exact<{
   currentPage: Scalars['Int']['input'];
@@ -293,6 +324,74 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const EditPostDocument = gql`
+    mutation EditPost($id: ID!, $title: String!, $content: String!) {
+  messageMutation {
+    editPost(id: $id, title: $title, content: $content)
+  }
+}
+    `;
+export type EditPostMutationFn = Apollo.MutationFunction<EditPostMutation, EditPostMutationVariables>;
+
+/**
+ * __useEditPostMutation__
+ *
+ * To run a mutation, you first call `useEditPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editPostMutation, { data, loading, error }] = useEditPostMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useEditPostMutation(baseOptions?: Apollo.MutationHookOptions<EditPostMutation, EditPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditPostMutation, EditPostMutationVariables>(EditPostDocument, options);
+      }
+export type EditPostMutationHookResult = ReturnType<typeof useEditPostMutation>;
+export type EditPostMutationResult = Apollo.MutationResult<EditPostMutation>;
+export type EditPostMutationOptions = Apollo.BaseMutationOptions<EditPostMutation, EditPostMutationVariables>;
+export const DeletePostDocument = gql`
+    mutation DeletePost($id: ID!) {
+  messageMutation {
+    deletePost(id: $id)
+  }
+}
+    `;
+export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
+
+/**
+ * __useDeletePostMutation__
+ *
+ * To run a mutation, you first call `useDeletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, options);
+      }
+export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
+export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
 export const CreateReplyDocument = gql`
     mutation CreateReply($postId: ID!, $content: String!) {
   messageMutation {
@@ -329,6 +428,73 @@ export function useCreateReplyMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreateReplyMutationHookResult = ReturnType<typeof useCreateReplyMutation>;
 export type CreateReplyMutationResult = Apollo.MutationResult<CreateReplyMutation>;
 export type CreateReplyMutationOptions = Apollo.BaseMutationOptions<CreateReplyMutation, CreateReplyMutationVariables>;
+export const EditReplyDocument = gql`
+    mutation EditReply($id: ID!, $content: String!) {
+  messageMutation {
+    editReply(id: $id, content: $content)
+  }
+}
+    `;
+export type EditReplyMutationFn = Apollo.MutationFunction<EditReplyMutation, EditReplyMutationVariables>;
+
+/**
+ * __useEditReplyMutation__
+ *
+ * To run a mutation, you first call `useEditReplyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditReplyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editReplyMutation, { data, loading, error }] = useEditReplyMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useEditReplyMutation(baseOptions?: Apollo.MutationHookOptions<EditReplyMutation, EditReplyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditReplyMutation, EditReplyMutationVariables>(EditReplyDocument, options);
+      }
+export type EditReplyMutationHookResult = ReturnType<typeof useEditReplyMutation>;
+export type EditReplyMutationResult = Apollo.MutationResult<EditReplyMutation>;
+export type EditReplyMutationOptions = Apollo.BaseMutationOptions<EditReplyMutation, EditReplyMutationVariables>;
+export const DeleteReplyDocument = gql`
+    mutation DeleteReply($id: ID!) {
+  messageMutation {
+    deleteReply(id: $id)
+  }
+}
+    `;
+export type DeleteReplyMutationFn = Apollo.MutationFunction<DeleteReplyMutation, DeleteReplyMutationVariables>;
+
+/**
+ * __useDeleteReplyMutation__
+ *
+ * To run a mutation, you first call `useDeleteReplyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReplyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReplyMutation, { data, loading, error }] = useDeleteReplyMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteReplyMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReplyMutation, DeleteReplyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReplyMutation, DeleteReplyMutationVariables>(DeleteReplyDocument, options);
+      }
+export type DeleteReplyMutationHookResult = ReturnType<typeof useDeleteReplyMutation>;
+export type DeleteReplyMutationResult = Apollo.MutationResult<DeleteReplyMutation>;
+export type DeleteReplyMutationOptions = Apollo.BaseMutationOptions<DeleteReplyMutation, DeleteReplyMutationVariables>;
 export const GetForumsDocument = gql`
     query GetForums($currentPage: Int!, $pageSize: Int!) {
   messageQuery {

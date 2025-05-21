@@ -1,4 +1,4 @@
 type UserQuery {
-    me: User!
+    me: User
     getUser(id: ID!): User!
 }

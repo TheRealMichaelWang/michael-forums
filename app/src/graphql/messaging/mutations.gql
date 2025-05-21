@@ -6,10 +6,34 @@ mutation CreatePost($forumId: ID!, $title: String!, $content: String!) {
   }
 }
 
+mutation EditPost($id: ID!, $title: String!, $content: String!) {
+  messageMutation {
+    editPost(id: $id, title: $title, content: $content)
+  }
+}
+
+mutation DeletePost($id: ID!) {
+  messageMutation {
+    deletePost(id: $id)
+  }
+}
+
 mutation CreateReply($postId: ID!, $content: String!) {
   messageMutation {
     createReply(postId: $postId, content: $content) {
       id
     }
+  }
+}
+
+mutation EditReply($id: ID!, $content: String!) {
+  messageMutation {
+    editReply(id: $id, content: $content)
+  }
+}
+
+mutation DeleteReply($id: ID!) {
+  messageMutation {
+    deleteReply(id: $id)
   }
 }
