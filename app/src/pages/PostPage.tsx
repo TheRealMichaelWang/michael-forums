@@ -56,8 +56,10 @@ const PostPage: React.FC = () => {
                 {post.replies.map((reply) => (
                     <li key={reply.id} className="item">
                         <h3>{reply.content}</h3>
-                        <UserLabel userId={reply.authorId} username={reply.authorName}/>
-                        <DateTimeLabel obj={reply}/>
+                        <div>
+                            <UserLabel userId={reply.authorId} username={reply.authorName}/>
+                            <DateTimeLabel obj={reply}/>
+                        </div>
                     </li>
                 ))}
             </ul>

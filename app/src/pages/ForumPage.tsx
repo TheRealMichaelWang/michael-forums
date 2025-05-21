@@ -41,8 +41,10 @@ const ForumPage: React.FC = () => {
                         <Link to={`/posts/${post.id}`}>
                             <h3 className="item-title">{post.title}</h3> 
                         </Link>
-                        <UserLabel userId={post.authorId} username={post.authorName}/>
-                        <DateTimeLabel obj={post}/>
+                        <div>
+                            <UserLabel userId={post.authorId} username={post.authorName}/>
+                            <DateTimeLabel obj={post}/>
+                        </div>
                     </li>
                 ))}
             </ul>            

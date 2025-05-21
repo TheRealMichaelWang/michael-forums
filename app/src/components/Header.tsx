@@ -8,8 +8,11 @@ const Header: React.FC = () => {
     <header className='header'>
         <div className='header-inner'>
             <nav>
-                <Link to="/" className="button-accent">Home</Link>
+                <Link to="/">
+                    <span className="text-3xl font-extrabold tracking-wide text-white drop-shadow-lg transition-transform transition-colors duration-200 hover:text-blue-200 hover:scale-105">MichaelForums</span>
+                </Link>
             </nav>
+
             <div className='header-actions'>
                 <SignedIn>
                     <UserButton/>
