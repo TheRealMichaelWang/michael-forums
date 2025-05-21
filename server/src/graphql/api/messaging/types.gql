@@ -1,9 +1,14 @@
+scalar DateTime
+
 type Forum {
     id: ID!
     title: String!
     about: String!
 
     posts(currentPage: Int!, pageSize: Int!): [Post!]!
+    
+    createdAt: DateTime!
+    updatedAt: DateTime!
 }
 
 type Post {
@@ -17,6 +22,9 @@ type Post {
 
     authorId: ID
     authorName: String
+    
+    createdAt: DateTime!
+    updatedAt: DateTime!
 }
 
 type Reply {
@@ -27,4 +35,7 @@ type Reply {
 
     authorId: ID
     authorName: String
+    
+    createdAt: DateTime!
+    updatedAt: DateTime!
 }

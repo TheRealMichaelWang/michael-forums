@@ -16,8 +16,8 @@ const PaginationStrip: React.FC<{pageSize: number, elements_displayed: number, c
 
             <div className="mx-4 text-gray-600 text-sm">
                 { (elements_displayed > 0)
-                    ? (<>Displaying {pageSize*(elements_displayed-1)+1} - {pageSize*(elements_displayed-1)+elements_displayed}.</>)
-                    : (<>End of list.</>)
+                    ? (<>Displaying items {pageSize*(elements_displayed-1)+1} through {pageSize*(elements_displayed-1)+elements_displayed}.</>)
+                    : (<>No items to display.</>)
                 }
                 
             </div>

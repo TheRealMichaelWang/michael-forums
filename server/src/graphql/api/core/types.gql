@@ -3,6 +3,9 @@ type User {
     username: String!
     email: String!
     isAdmin: Boolean!
+    
+    updatedAt: DateTime!
+    createdAt: DateTime!
 
     posts(currentPage: Int!, pageSize: Int!): [Post!]!
 }

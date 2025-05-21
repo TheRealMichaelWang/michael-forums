@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useGetPostQuery, useCreateReplyMutation } from "../generated/graphql";
 import UserLabel from "../components/UserLabel";
 import PaginationStrip from "../components/PaginationStrip";
+import { SignedIn } from "@clerk/clerk-react";
 
 const PostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -59,21 +60,25 @@ const PostPage: React.FC = () => {
                 ))}
             </ul>
             <PaginationStrip pageSize={pageSize} elements_displayed={post.replies.length} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
-            <form onSubmit={handleReplySubmit}>
-                <textarea
-                    className="textarea"
-                    value={replyContent}
-                    onChange={e => setReplyContent(e.target.value)}
-                    placeholder="Write your reply..."
-                    required
-                    rows={3}
-                    style={{ width: "100%" }}
-                />
-                <button type="submit" disabled={replyLoading || !replyContent.trim()} className="button-primary">
-                    {replyLoading ? "Posting..." : "Post Reply"}
-                </button>
-                {replyError && <p style={{ color: "red" }}>Error: {replyError.message}</p>}
-            </form>
+            
+            <SignedIn>
+                <form onSubmit={handleReplySubmit}>
+                    <textarea
+                        className="textarea"
+                        value={replyContent}
+                        onChange={e => setReplyContent(e.target.value)}
+                        placeholder="Write your reply..."
+                        required
+                        rows={3}
+                        style={{ width: "100%" }}
+                    />
+                    <button type="submit" disabled={replyLoading || !replyContent.trim()} className="button-primary">
+                        {replyLoading ? "Posting..." : "Post Reply"}
+                    </button>
+                    {replyError && <p style={{ color: "red" }}>Error: {replyError.message}</p>}
+                </form>
+            </SignedIn>
+            
             <div>
                 <Link to={`/forums/${post.forumId}`} className="button-primary my-2 inline-block mx-auto">
                     Back to Forum

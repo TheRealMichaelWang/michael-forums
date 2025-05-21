@@ -6,7 +6,9 @@ export const emptyUser: User = {
     id: '',
     username: '',
     isAdmin: false,
-    posts: []
+    posts: [],
+    updatedAt: new Date(0),
+    createdAt: new Date(0)
 }
 
 //an empty forum object to be used as a default value
@@ -14,7 +16,9 @@ export const emptyForum : Forum = {
     id: '',
     title: '',
     about: '',
-    posts: []
+    posts: [],
+    updatedAt: new Date(0),
+    createdAt: new Date(0)
 }
 
 //an empty post object to be used as a default value
@@ -23,12 +27,16 @@ export const emptyPost : Post = {
     title: '',
     content: '',
     forumId: '',
-    replies: []
+    replies: [],
+    updatedAt: new Date(0),
+    createdAt: new Date(0)
 }
 
 export const emptyReply : Reply = {
     id: '',
     content: '',
     postId: '',
-    authorId: ''
+    authorId: '',
+    updatedAt: new Date(0),
+    createdAt: new Date(0)
 }
