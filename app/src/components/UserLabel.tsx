@@ -6,9 +6,9 @@ const UserLabel: React.FC<{userId?: string | null, username?: string | null}> = 
         <p className="mx-4 text-gray-600 text-sm">
             {userId ? 
                 (<Link to={`/users/${userId}`}>
-                    <p className="item-about">By {username!}</p>
+                    By {username!}
                 </Link>) 
-                : (<p className="item-about">By Deleted User</p>)
+                : (<>By Deleted User</>)
             }
         </p>
     );
