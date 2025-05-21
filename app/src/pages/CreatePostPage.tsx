@@ -33,31 +33,41 @@ const CreatePostPage: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1>Create a new post</h1>
+        <div className="list">
+            <h1 className="title">Create a new post</h1>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>
+                <div className="mb-4 text-left">
+                    <label className="block mb-2 font-semibold" htmlFor="title">
                         Title:
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            required
-                        />
                     </label>
+                    <input
+                        id="title"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
+                        className="textarea"
+                    />
                 </div>
-                <div>
-                    <label>
+                <div className="mb-4 text-left">
+                    <label className="block mb-2 font-semibold" htmlFor="content">
                         Content:
-                        <textarea
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                            required
-                        />
                     </label>
+                    <textarea
+                        id="content"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        required
+                        className="textarea"
+                        rows={8}
+                        placeholder="Write your post here..."
+                    />
                 </div>
-                <button type="submit">
+                <button
+                    type="submit"
+                    className="button-primary"
+                    disabled={loading || !title.trim() || !content.trim()}
+                >
                     {loading ? "Creating..." : "Create Post"}
                 </button>
             </form>
