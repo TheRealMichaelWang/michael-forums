@@ -6,7 +6,7 @@ import UserLabel from "../components/UserLabel";
 import PaginationStrip from "../components/PaginationStrip";
 import { SignedIn } from "@clerk/clerk-react";
 import DateTimeLabel from "../components/DateTimeLabel";
-import { marked } from "marked"
+import Markdown from "../components/Markdown";
 
 const PostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -145,10 +145,7 @@ const PostPage: React.FC = () => {
                 </form>
             ) : 
             (<>
-                <span
-                    dangerouslySetInnerHTML={{ __html: marked.parse(post.content, { breaks: true }) }}
-                />
-                
+                <Markdown markdownText={post.content}/>
                 {(deletePostError || deleteErrorMsg) && (
                     <span style={{ color: "red" }}>
                         Error: {deletePostError?.message || deleteErrorMsg}
@@ -176,9 +173,7 @@ const PostPage: React.FC = () => {
             <ul>
                 {post.replies.map((reply) => (
                     <li key={reply.id} className="item">
-                        <span
-                            dangerouslySetInnerHTML={{ __html: marked.parse(reply.content, { breaks: true }) }}
-                        />
+                        <Markdown markdownText={reply.content}/>
                         <div>
                             <UserLabel userId={reply.authorId} username={reply.authorName}/>
                             <DateTimeLabel obj={reply}/>
