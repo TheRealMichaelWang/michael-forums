@@ -50,7 +50,7 @@
 }
 
 .pagination {
-  @apply flex justify-between mt-8;
+  @apply flex items-center mt-8;
 }
 
 .pagination-button {

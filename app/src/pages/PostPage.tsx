@@ -1,7 +1,7 @@
 import React from "react";
-import { useAuth } from "@clerk/clerk-react";
+//import { useAuth } from "@clerk/clerk-react";
 import { Link, useParams } from "react-router-dom";
-import { useGetPostQuery, useGetCurrentUserQuery } from "../generated/graphql";
+import { useGetPostQuery } from "../generated/graphql";
 import UserLabel from "../components/UserLabel";
 import PaginationStrip from "../components/PaginationStrip";
 import { SignedIn } from "@clerk/clerk-react";
@@ -10,26 +10,27 @@ import Markdown from "../components/Markdown";
 import useReply from "../components/hooks/UseReply";
 import useDeletePost from "../components/hooks/UseDeletePost";
 import useEditPost from "../components/hooks/UseEditPost";
+import { useUserStore } from "../userStore";
 
 const PostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [currentPage, setCurrentPage] = React.useState(1);
     const pageSize = 10; // number of comments to display per page; hardcoded for now
-
-    const { isLoaded, isSignedIn } = useAuth();
-    
     // useQuery hook to execute the GraphQL query
     const { loading, error, data, refetch: post_refetch } = useGetPostQuery({
         variables: { id: id!, currentPage: currentPage, pageSize: pageSize },
     });
     const post = data?.messageQuery?.getPost;
-
-    const { data: user_data, loading: user_loading, refetch: user_refetch } = useGetCurrentUserQuery({ 
+    
+    //const { isLoaded, isSignedIn } = useAuth();
+    
+    /*const { data: user_data, loading: user_loading, refetch: user_refetch } = useGetCurrentUserQuery({ 
         variables: {},
         fetchPolicy: "network-only",
         skip: !isLoaded || !isSignedIn
-    });
-    const user_id = user_data?.userQuery?.me?.id;
+    });*/
+    const user = useUserStore(state => state.user);
+    //const user_id = user_data?.userQuery?.me?.id;
 
     const {
         replyContent, setReplyContent, handleReplySubmit, 
@@ -37,7 +38,7 @@ const PostPage: React.FC = () => {
     } = useReply(id!, () => {
         setCurrentPage(1);
         post_refetch();
-        user_refetch();
+        //user_refetch();
     });
 
     const {
@@ -48,12 +49,12 @@ const PostPage: React.FC = () => {
         loading: editLoading, error: editError
     } = useEditPost(post ?? { id: "", title: "", content: "" }, () => {
         post_refetch();
-        user_refetch();
+        //user_refetch();
     })
 
     const {handleDelete, loading: deleteLoading, error: deleteError} = useDeletePost(id!, post?.forumId ?? "")
     
-    if (!isLoaded || loading || user_loading) return <p>Loading...</p>;
+    if (loading) return <p>Loading...</p>;
     if (deleteLoading) return <p>Deleting Post...</p>
     if (error) return <p>Error: {error.message}</p>;
     if (!post) return <p>Post not found</p>;
@@ -110,7 +111,7 @@ const PostPage: React.FC = () => {
                 )}
             </>)}
 
-            {user_id === post.authorId && !editing && (
+            {user?.id === post.authorId && !editing && (
                 <div>
                     <button className="button-secondary" onClick={startEditing}>
                         Edit

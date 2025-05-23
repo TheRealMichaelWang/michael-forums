@@ -30,7 +30,7 @@ export class UserService {
 
     public async ensureUserExists(sessionClaims: ClerkSessionClaims): Promise<[User, boolean]> {
         let result = await this.userDao.ensureUserExists(sessionClaims);
-        if (result) {
+        if (result[1]) {
             logger.info(`User ${sessionClaims.username} (${sessionClaims.authUserId}) created.`);
         }
         return result;

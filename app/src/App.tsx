@@ -5,9 +5,12 @@ import HomePage from './pages/HomePage';
 import ForumPage from './pages/ForumPage';
 import PostPage from './pages/PostPage';
 import CreatePostPage from './pages/CreatePostPage';
+import { useUserFetcher } from './components/hooks/UseUserFetcher';
 import './App.css'
 
 const App: React.FC = () => {
+  useUserFetcher();
+
   return (
     <div>
       <Header />
