@@ -9,7 +9,7 @@ const Void = new GraphQLScalarType({
     parseValue() {
         return null;
     },
-    parseLiteral(ast) {
+    parseLiteral() {
         return null;
     }
 })

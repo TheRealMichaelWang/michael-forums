@@ -19,6 +19,10 @@ export default tseslint.config(
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parserOptions: {
+        project: ['./tsconfig.json'],
+        tsconfigRootDir: './',
+      },
     },
     plugins: {
       'react-hooks': reactHooks,
@@ -30,6 +34,6 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-    },
+    }
   },
 )

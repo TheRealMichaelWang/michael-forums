@@ -3,13 +3,13 @@ import { ResolverContext } from "./";
 import { emptyUser, emptyForum, emptyPost, emptyReply } from "../../util/empty";
 
 export const RootMutation: RootMutationResolvers<ResolverContext> = {
-    userMutation: async (parent, args, context) => {
+    userMutation: async() => {
         return {
             mockRegister: emptyUser,
             mockAuth: emptyUser // or undefined if you want it to be null
         };
     },
-    messageMutation: async (parent, args, context) => {
+    messageMutation: async() => {
         return {
             createForum: emptyForum,
             editForum: false,

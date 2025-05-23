@@ -14,7 +14,7 @@ export const UserMutation: UserMutationResolvers<ResolverContext> = {
     },
 
     //This is a mock function to authenticate a user. Haven't implemented yet.
-    mockAuth: async (parent, { id }, contextValue) => {
+    mockAuth: async () => {
         return null;
     }
 }
