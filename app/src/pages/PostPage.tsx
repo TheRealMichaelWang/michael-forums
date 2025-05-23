@@ -1,117 +1,62 @@
 import React from "react";
 import { useAuth } from "@clerk/clerk-react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { useGetPostQuery, useCreateReplyMutation, useGetCurrentUserQuery, useEditPostMutation, useDeletePostMutation } from "../generated/graphql";
+import { Link, useParams } from "react-router-dom";
+import { useGetPostQuery, useGetCurrentUserQuery } from "../generated/graphql";
 import UserLabel from "../components/UserLabel";
 import PaginationStrip from "../components/PaginationStrip";
 import { SignedIn } from "@clerk/clerk-react";
 import DateTimeLabel from "../components/DateTimeLabel";
 import Markdown from "../components/Markdown";
+import useReply from "../components/UseReply";
+import useDeletePost from "../components/UseDeletePost";
+import useEditPost from "../components/UseEditPost";
 
 const PostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [currentPage, setCurrentPage] = React.useState(1);
     const pageSize = 10; // number of comments to display per page; hardcoded for now
 
-    const [createReply, { loading: replyLoading, error: replyError }] = useCreateReplyMutation();
-    const [replyContent, setReplyContent] = React.useState("");
-
-    const [editPost, { loading: editPostLoading, error: editPostError}] = useEditPostMutation();
-    const [editingPost, setEditingPost] = React.useState(false);
-    //const [editingReplyId, setEditingReplyId] = React.useState<string | null>(null);
-    const [editTitle, setEditTitle] = React.useState("");
-    const [editContent, setEditContent] = React.useState("");
-    const [editPostErrorMessage, setEditPostErrorMessage] = React.useState<string | null>(null);
-
-    const [deletePost, { loading: deletePostLoading, error: deletePostError}] = useDeletePostMutation();
-    const [deleteErrorMsg, setDeleteErrorMsg] = React.useState<string | null>(null);
-
     const { isLoaded, isSignedIn } = useAuth();
-    const navigate = useNavigate();
-
+    
     // useQuery hook to execute the GraphQL query
-    const { loading, error, data, refetch } = useGetPostQuery({
+    const { loading, error, data, refetch: post_refetch } = useGetPostQuery({
         variables: { id: id!, currentPage: currentPage, pageSize: pageSize },
     });
+    const post = data?.messageQuery?.getPost;
 
-    //get current user ID
     const { data: user_data, loading: user_loading, refetch: user_refetch } = useGetCurrentUserQuery({ 
         variables: {},
         fetchPolicy: "network-only",
         skip: !isLoaded || !isSignedIn
     });
     const user_id = user_data?.userQuery?.me?.id;
+
+    const {
+        replyContent, setReplyContent, handleReplySubmit, 
+        loading: replyLoading, error: replyError
+    } = useReply(id!, () => {
+        setCurrentPage(1);
+        post_refetch();
+        user_refetch();
+    });
+
+    const {
+        editing, startEditing, cancelEditing, 
+        title: editTitle, setTitle: setEditTitle, 
+        content: editContent, setContent: setEditContent,
+        handleEditSubmit,
+        loading: editLoading, error: editError
+    } = useEditPost(post ?? { id: "", title: "", content: "" }, () => {
+        post_refetch();
+        user_refetch();
+    })
+
+    const {handleDelete, loading: deleteLoading, error: deleteError} = useDeletePost(id!, post?.forumId ?? "")
     
     if (!isLoaded || loading || user_loading) return <p>Loading...</p>;
-    if (deletePostLoading) return <p>Deleting Post...</p>
+    if (deleteLoading) return <p>Deleting Post...</p>
     if (error) return <p>Error: {error.message}</p>;
-    if (!id) { return <p>Post ID is required</p>; }
-
-    const post = data?.messageQuery?.getPost;
-    if (!post) {
-        return <p>Post not found</p>;
-    }
-
-    const handleReplySubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!replyContent.trim()) {
-            return;
-        }
-
-        try {
-            const {data} =await createReply({
-                variables: { postId: id, content: replyContent },
-            });
-
-            if (data?.messageMutation?.createReply?.id) {
-                setReplyContent("");
-                setCurrentPage(1); // Reset to the first page after submitting a reply
-                refetch(); // Refresh replies
-                user_refetch();
-            }
-        } catch { }
-    };
-
-    const handleEditPost = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!editContent.trim() || !editTitle.trim()) {
-            return;
-        }
-
-        try{
-            const {data} = await editPost({
-                variables: { id: id, title: editTitle, content: editContent}
-            })
-
-            if (data?.messageMutation?.editPost) {
-                setEditingPost(false);
-                refetch(); // Refresh replies
-                user_refetch();
-            }
-            else {
-                setEditPostErrorMessage("You do not have permission to edit this post.");
-            }
-        }
-        catch { }
-    }
-
-    const handleDeletePost = async () => {
-        const confirmed = window.confirm("Are you sure you want to delete this post? The post will be deleted permanently.");
-        if (!confirmed) return;
-
-        try {
-            const {data} = await deletePost({
-                variables: { id: id }
-            })
-            if (data?.messageMutation?.deletePost) {
-                navigate(`/forums/${post.forumId}`);
-            }
-            else {
-                setDeleteErrorMsg("You do not have permission to delete this post!");
-            }
-        }
-        catch { }
-    }
+    if (!post) return <p>Post not found</p>;
 
     return (
         <div className="list">
@@ -119,8 +64,8 @@ const PostPage: React.FC = () => {
             <h2><UserLabel userId={post.authorId} username={post.authorName}/></h2>
             <DateTimeLabel obj={post}/>
 
-            {editingPost ? (
-                <form onSubmit={handleEditPost}>
+            {editing ? (
+                <form onSubmit={handleEditSubmit}>
                     <input
                         className="textarea"
                         type="text"
@@ -133,37 +78,44 @@ const PostPage: React.FC = () => {
                         onChange={e => setEditContent(e.target.value)}
                         rows={3}
                     />
-                    <button type="submit" disabled={editPostLoading || !editContent.trim() || !editTitle.trim()} className="button-primary mr-2">
-                        {editPostLoading ? "Saving edits..." : "Save"}
+                    <button 
+                        type="submit" 
+                        disabled={editLoading || !editContent.trim() || !editTitle.trim()} 
+                        className="button-primary mr-2"
+                    >
+                        {editLoading ? "Saving edits..." : "Save"}
                     </button>
-                    <button type="button" className="button-secondary" onClick={() => setEditingPost(false)}>Cancel</button>
-                { (editPostError || editPostErrorMessage) && 
-                    <span style={{ color: "red" }}>
-                        Error: {editPostError?.message || editPostErrorMessage}
-                    </span>
-                }
+                    
+                    <button 
+                        type="button" 
+                        className="button-secondary" 
+                        onClick={cancelEditing}
+                    >
+                        Cancel
+                    </button>
+
+                    { editError && 
+                        <span style={{ color: "red" }}>
+                            Error: {editError.message}
+                        </span>
+                    }
                 </form>
             ) : 
             (<>
                 <Markdown markdownText={post.content}/>
-                {(deletePostError || deleteErrorMsg) && (
+                {deleteError && (
                     <span style={{ color: "red" }}>
-                        Error: {deletePostError?.message || deleteErrorMsg}
+                        Error: {deleteError.message}
                     </span>
                 )}
             </>)}
 
-            {user_id === post.authorId && !editingPost && (
+            {user_id === post.authorId && !editing && (
                 <div>
-                    <button className="button-secondary" onClick={() => {
-                        setEditingPost(true);
-                        setEditContent(post.content);
-                        setEditTitle(post.title);
-                    }}>
+                    <button className="button-secondary" onClick={startEditing}>
                         Edit
                     </button>
-
-                    <button className="button-secondary" onClick={handleDeletePost}>
+                    <button className="button-secondary" onClick={handleDelete}>
                         Delete
                     </button>
                 </div>

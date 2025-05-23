@@ -10,6 +10,7 @@ import { MessageQuery } from './messaging/queries'
 import { RootQuery } from './queries'
 import { RootMutation } from './mutations'
 import DateTimeScalar from './scalars/dateTime'
+import Void from './scalars/void'
 
 //Fill the resolvers with resolvers defined in ts files through the subdirectories of api
 
@@ -28,5 +29,6 @@ export const resolvers: IResolvers<any, ResolverContext> = {
     MessageQuery,
     RootQuery,
     RootMutation,
-    DateTime: DateTimeScalar
+    DateTime: DateTimeScalar,
+    Void: Void
 }

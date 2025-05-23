@@ -1,7 +1,6 @@
 import { MessageMutationResolvers } from "../../../generated/graphql";
 import { ResolverContext } from "..";
 import { MessageService } from "../../../services/messageService";
-import { AuthorizationService } from "../../../services/authorizationService";
 
 export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
     createForum: async (_, {title, about}, contextValue) => {
@@ -15,25 +14,15 @@ export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
     },
 
     editForum: async (_, {id, title, about}, contextValue) => {
-        let authorizationService = contextValue.container.get(AuthorizationService);
-        if (!await authorizationService.canEditForum(contextValue.req.auth?.userId)) {
-            return false;
-        }
-
         let messageService = contextValue.container.get(MessageService);
         await messageService.editForum(id, title, about, contextValue.req.auth?.userId);
-        return true;
+        return null;
     },
 
     deleteForum: async (_, {id}, contextValue) => {
-        let authorizationService = contextValue.container.get(AuthorizationService);
-        if (!await authorizationService.canDeleteForum(contextValue.req.auth?.userId)) {
-            return false;
-        }
-
         let messageService = contextValue.container.get(MessageService);
         await messageService.deleteForum(id, contextValue.req.auth?.userId);
-        return true;
+        return null;
     },
 
     createPost: async (_, {forumId, title, content}, contextValue) => {
@@ -47,23 +36,15 @@ export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
     },
 
     editPost: async (_, {id, title, content}, contextValue) => {
-        let authorizationService = contextValue.container.get(AuthorizationService);
-        if (!await authorizationService.canEditPost(id, contextValue.req.auth?.userId)) {
-            return false;
-        }
         let messageService = contextValue.container.get(MessageService);
         await messageService.editPost(id, title, content, contextValue.req.auth?.userId);
-        return true;
+        return null;
     },
 
     deletePost: async (_, {id}, contextValue) => {
-        let authorizationService = contextValue.container.get(AuthorizationService);
-        if (!await authorizationService.canDeletePost(id, contextValue.req.auth?.userId)) {
-            return false;
-        }
         let messageService = contextValue.container.get(MessageService);
         await messageService.deletePost(id, contextValue.req.auth?.userId);
-        return true;
+        return null;
     },
 
     createReply: async (_, {postId, content}, contextValue) => {
@@ -74,22 +55,14 @@ export const MessageMutation : MessageMutationResolvers<ResolverContext> = {
     },
 
     editReply: async (_, {id, content}, contextValue) => {
-        let authorizationService = contextValue.container.get(AuthorizationService);
-        if (!await authorizationService.canEditReply(id, contextValue.req.auth?.userId)) {
-            return false;
-        }
         let messageService = contextValue.container.get(MessageService);
         await messageService.editReply(id, content, contextValue.req.auth?.userId);
-        return true;
+        return null;
     },
 
     deleteReply: async (_, {id}, contextValue) => {
-        let authorizationService = contextValue.container.get(AuthorizationService);
-        if (!await authorizationService.canDeleteReply(id, contextValue.req.auth?.userId)) {
-            return false;
-        }
         let messageService = contextValue.container.get(MessageService);
         await messageService.deleteReply(id, contextValue.req.auth?.userId);
-        return true;
+        return null;
     }
 }

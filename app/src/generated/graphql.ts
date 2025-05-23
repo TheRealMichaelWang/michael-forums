@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  Void: { input: any; output: any; }
 };
 
 export type Forum = {
@@ -39,12 +40,12 @@ export type MessageMutation = {
   createForum: Forum;
   createPost: Post;
   createReply: Reply;
-  deleteForum: Scalars['Boolean']['output'];
-  deletePost: Scalars['Boolean']['output'];
-  deleteReply: Scalars['Boolean']['output'];
-  editForum: Scalars['Boolean']['output'];
-  editPost: Scalars['Boolean']['output'];
-  editReply: Scalars['Boolean']['output'];
+  deleteForum?: Maybe<Scalars['Void']['output']>;
+  deletePost?: Maybe<Scalars['Void']['output']>;
+  deleteReply?: Maybe<Scalars['Void']['output']>;
+  editForum?: Maybe<Scalars['Void']['output']>;
+  editPost?: Maybe<Scalars['Void']['output']>;
+  editReply?: Maybe<Scalars['Void']['output']>;
 };
 
 
@@ -233,14 +234,14 @@ export type EditPostMutationVariables = Exact<{
 }>;
 
 
-export type EditPostMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', editPost: boolean } | null };
+export type EditPostMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', editPost?: any | null } | null };
 
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DeletePostMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', deletePost: boolean } | null };
+export type DeletePostMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', deletePost?: any | null } | null };
 
 export type CreateReplyMutationVariables = Exact<{
   postId: Scalars['ID']['input'];
@@ -256,14 +257,14 @@ export type EditReplyMutationVariables = Exact<{
 }>;
 
 
-export type EditReplyMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', editReply: boolean } | null };
+export type EditReplyMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', editReply?: any | null } | null };
 
 export type DeleteReplyMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DeleteReplyMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', deleteReply: boolean } | null };
+export type DeleteReplyMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', deleteReply?: any | null } | null };
 
 export type GetForumsQueryVariables = Exact<{
   currentPage: Scalars['Int']['input'];

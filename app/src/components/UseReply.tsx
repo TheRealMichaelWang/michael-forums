@@ -10,17 +10,15 @@ const useReply = (postId: string, onSuccess: () => void) => {
         if (!replyContent.trim()) { return; }
 
         try {
-            const { data } = await createReply({
+            await createReply({
                 variables: { postId, content: replyContent}
             })
-            if (data?.messageMutation?.createReply?.id) { //reply sucesfully submited
-                setReplyContent(""); //clear reply input box
-                onSuccess();
-            }
+            setReplyContent(""); //clear reply input box
+            onSuccess();
         } catch { }
-
-        return [ replyContent, setReplyContent, handleReplySubmit, loading, error ]
     }
+    
+    return { replyContent, setReplyContent, handleReplySubmit, loading, error }
 }
 
 export default useReply;

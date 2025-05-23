@@ -1,13 +1,13 @@
 type MessageMutation {
     createForum(title: String!, about: String!): Forum!
-    editForum(id: ID!, title: String!, about: String!): Boolean!
-    deleteForum(id: ID!): Boolean!
+    editForum(id: ID!, title: String!, about: String!): Void
+    deleteForum(id: ID!): Void
 
     createPost(forumId: ID!, title: String!, content: String!): Post!
-    editPost(id: ID!, title: String!, content: String!): Boolean!
-    deletePost(id: ID!): Boolean!
+    editPost(id: ID!, title: String!, content: String!): Void
+    deletePost(id: ID!): Void
 
     createReply(postId: ID!, content: String!): Reply!
-    editReply(id: ID!, content: String!): Boolean!
-    deleteReply(id: ID!): Boolean!
+    editReply(id: ID!, content: String!): Void
+    deleteReply(id: ID!): Void
 }
