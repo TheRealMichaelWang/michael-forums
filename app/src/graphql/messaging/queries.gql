@@ -1,9 +1,31 @@
+fragment ForumFields on Forum {
+  id
+  title
+  about
+}
+
+fragment PostFields on Post {
+  id
+  title
+  authorName
+  authorId
+  createdAt
+  updatedAt
+}
+
+fragment ReplyFields on Reply {
+  id
+  content
+  authorName
+  authorId
+  createdAt
+  updatedAt
+}
+
 query GetForums($currentPage: Int!, $pageSize: Int!) {
   messageQuery {
     getForums(currentPage: $currentPage, pageSize: $pageSize) {
-      id
-      title
-      about
+      ...ForumFields
     }
   }
 }
@@ -11,16 +33,9 @@ query GetForums($currentPage: Int!, $pageSize: Int!) {
 query GetForum($id: ID!, $currentPage: Int!, $pageSize: Int!) {
   messageQuery {
     getForum(id: $id) {
-      id
-      title
-      about
+      ...ForumFields
       posts(currentPage: $currentPage, pageSize: $pageSize) {
-        id
-        title
-        authorName
-        authorId
-        createdAt
-        updatedAt
+        ...PostFields
       }
     }
   }
@@ -29,22 +44,10 @@ query GetForum($id: ID!, $currentPage: Int!, $pageSize: Int!) {
 query GetPost($id: ID!, $currentPage: Int!, $pageSize: Int!) {
   messageQuery {
     getPost(id: $id) {
-      id
-      title
-      content
-      authorName
-      authorId
-      forumId
-      createdAt
-      updatedAt
+      ...PostFields
 
       replies(currentPage: $currentPage, pageSize: $pageSize) {
-        id
-        content
-        authorName
-        authorId
-        createdAt
-        updatedAt
+        ...ReplyFields
       }
     }
   }
