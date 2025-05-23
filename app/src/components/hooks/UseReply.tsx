@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useCreateReplyMutation } from "../generated/graphql"
+import { useCreateReplyMutation } from "../../generated/graphql"
 
 const useReply = (postId: string, onSuccess: () => void) => {
     const [replyContent, setReplyContent] = useState("");

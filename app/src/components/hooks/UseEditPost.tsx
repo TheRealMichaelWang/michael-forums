@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useEditPostMutation } from "../generated/graphql";
+import { useEditPostMutation } from "../../generated/graphql";
 
 const useEditPost = (post: { id: string, title: string, content: string }, onSuccess: () => void) => {
     const [editing, setEditing] = useState(false);

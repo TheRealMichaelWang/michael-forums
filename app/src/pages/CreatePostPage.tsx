@@ -1,41 +1,17 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useCreatePostMutation } from "../generated/graphql";
+import { useParams } from "react-router-dom";
+import useCreatePost from "../components/hooks/UseCreatePost";
 
 const CreatePostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
-    const [title, setTitle] = React.useState("");
-    const [content, setContent] = React.useState("");
-    const [createPost, {loading}] = useCreatePostMutation();
+    const { title, setTitle, content, setContent, handleCreateSubmit, error, loading } = useCreatePost(id!);
 
     if (!id) { return <p>Thread ID is required</p>; }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log("Submitting...");
-
-        try {
-            const { data } = await createPost({
-                variables: { forumId: id, title, content },
-            });
-            console.log({ data });
-            let post = data?.messageMutation?.createPost;
-            if (post) {
-                navigate(`/posts/${post.id}`);
-            } else {
-                alert("No post returned from mutation");
-            }
-        } catch (error: any) {
-            alert(error?.message || "Unknown error");
-            console.error("Error creating post:", error);
-        }
-    };
 
     return (
         <div className="list">
             <h1 className="title">Create a new post</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleCreateSubmit}>
                 <div className="mb-4 text-left">
                     <label className="block mb-2 font-semibold" htmlFor="title">
                         Title:
@@ -70,6 +46,7 @@ const CreatePostPage: React.FC = () => {
                 >
                     {loading ? "Creating..." : "Create Post"}
                 </button>
+                 {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
             </form>
         </div>
     );

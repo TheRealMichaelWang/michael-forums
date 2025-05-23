@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useDeletePostMutation } from "../generated/graphql";
+import { useDeletePostMutation } from "../../generated/graphql";
 
 const useDeletePost = (postId: string, forumId: string) => {
     const [deletePost, {loading, error}] = useDeletePostMutation();

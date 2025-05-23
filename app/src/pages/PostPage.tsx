@@ -7,9 +7,9 @@ import PaginationStrip from "../components/PaginationStrip";
 import { SignedIn } from "@clerk/clerk-react";
 import DateTimeLabel from "../components/DateTimeLabel";
 import Markdown from "../components/Markdown";
-import useReply from "../components/UseReply";
-import useDeletePost from "../components/UseDeletePost";
-import useEditPost from "../components/UseEditPost";
+import useReply from "../components/hooks/UseReply";
+import useDeletePost from "../components/hooks/UseDeletePost";
+import useEditPost from "../components/hooks/UseEditPost";
 
 const PostPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
