@@ -45,6 +45,8 @@ query GetPost($id: ID!, $currentPage: Int!, $pageSize: Int!) {
   messageQuery {
     getPost(id: $id) {
       ...PostFields
+      content
+      forumId
 
       replies(currentPage: $currentPage, pageSize: $pageSize) {
         ...ReplyFields

@@ -216,7 +216,7 @@ export type UserQueryGetUserArgs = {
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'RootQuery', userQuery?: { __typename?: 'UserQuery', me?: { __typename?: 'User', id: string } | null } | null };
+export type GetCurrentUserQuery = { __typename?: 'RootQuery', userQuery?: { __typename?: 'UserQuery', me?: { __typename?: 'User', id: string, isAdmin: boolean } | null } | null };
 
 export type CreatePostMutationVariables = Exact<{
   forumId: Scalars['ID']['input'];
@@ -266,6 +266,12 @@ export type DeleteReplyMutationVariables = Exact<{
 
 export type DeleteReplyMutation = { __typename?: 'RootMutation', messageMutation?: { __typename?: 'MessageMutation', deleteReply?: any | null } | null };
 
+export type ForumFieldsFragment = { __typename?: 'Forum', id: string, title: string, about: string };
+
+export type PostFieldsFragment = { __typename?: 'Post', id: string, title: string, authorName?: string | null, authorId?: string | null, createdAt: any, updatedAt: any };
+
+export type ReplyFieldsFragment = { __typename?: 'Reply', id: string, content: string, authorName?: string | null, authorId?: string | null, createdAt: any, updatedAt: any };
+
 export type GetForumsQueryVariables = Exact<{
   currentPage: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
@@ -290,14 +296,41 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getPost: { __typename?: 'Post', id: string, title: string, content: string, authorName?: string | null, authorId?: string | null, forumId: string, createdAt: any, updatedAt: any, replies: Array<{ __typename?: 'Reply', id: string, content: string, authorName?: string | null, authorId?: string | null, createdAt: any, updatedAt: any }> } } | null };
+export type GetPostQuery = { __typename?: 'RootQuery', messageQuery?: { __typename?: 'MessageQuery', getPost: { __typename?: 'Post', content: string, forumId: string, id: string, title: string, authorName?: string | null, authorId?: string | null, createdAt: any, updatedAt: any, replies: Array<{ __typename?: 'Reply', id: string, content: string, authorName?: string | null, authorId?: string | null, createdAt: any, updatedAt: any }> } } | null };
 
-
+export const ForumFieldsFragmentDoc = gql`
+    fragment ForumFields on Forum {
+  id
+  title
+  about
+}
+    `;
+export const PostFieldsFragmentDoc = gql`
+    fragment PostFields on Post {
+  id
+  title
+  authorName
+  authorId
+  createdAt
+  updatedAt
+}
+    `;
+export const ReplyFieldsFragmentDoc = gql`
+    fragment ReplyFields on Reply {
+  id
+  content
+  authorName
+  authorId
+  createdAt
+  updatedAt
+}
+    `;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   userQuery {
     me {
       id
+      isAdmin
     }
   }
 }
@@ -546,13 +579,11 @@ export const GetForumsDocument = gql`
     query GetForums($currentPage: Int!, $pageSize: Int!) {
   messageQuery {
     getForums(currentPage: $currentPage, pageSize: $pageSize) {
-      id
-      title
-      about
+      ...ForumFields
     }
   }
 }
-    `;
+    ${ForumFieldsFragmentDoc}`;
 
 /**
  * __useGetForumsQuery__
@@ -591,21 +622,15 @@ export const GetForumDocument = gql`
     query GetForum($id: ID!, $currentPage: Int!, $pageSize: Int!) {
   messageQuery {
     getForum(id: $id) {
-      id
-      title
-      about
+      ...ForumFields
       posts(currentPage: $currentPage, pageSize: $pageSize) {
-        id
-        title
-        authorName
-        authorId
-        createdAt
-        updatedAt
+        ...PostFields
       }
     }
   }
 }
-    `;
+    ${ForumFieldsFragmentDoc}
+${PostFieldsFragmentDoc}`;
 
 /**
  * __useGetForumQuery__
@@ -645,26 +670,17 @@ export const GetPostDocument = gql`
     query GetPost($id: ID!, $currentPage: Int!, $pageSize: Int!) {
   messageQuery {
     getPost(id: $id) {
-      id
-      title
+      ...PostFields
       content
-      authorName
-      authorId
       forumId
-      createdAt
-      updatedAt
       replies(currentPage: $currentPage, pageSize: $pageSize) {
-        id
-        content
-        authorName
-        authorId
-        createdAt
-        updatedAt
+        ...ReplyFields
       }
     }
   }
 }
-    `;
+    ${PostFieldsFragmentDoc}
+${ReplyFieldsFragmentDoc}`;
 
 /**
  * __useGetPostQuery__

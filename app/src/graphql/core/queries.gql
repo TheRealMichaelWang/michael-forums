@@ -2,6 +2,7 @@ query GetCurrentUser {
     userQuery {
         me {
             id
+            isAdmin
         }
     }
 }
