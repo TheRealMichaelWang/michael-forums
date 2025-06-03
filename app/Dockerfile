@@ -1,26 +1,34 @@
 # Stage 1: Build Stage
-# Use Node.js image to build our application
 FROM node:20-alpine as build
 
-# Set working directory
 WORKDIR /app
 
 # Copy package files first (better caching)
-COPY package*.json ./
+COPY app/package*.json ./
 RUN npm install
 
-# Copy rest of the application
-COPY . .
+# Copy the entire project (both app and server for schema access)
+COPY . /project
+
+# Set up the app directory
+WORKDIR /project/app
+RUN npm install
+
+# Accept build arguments for environment variables
+ARG VITE_CLERK_PUBLISHABLE_KEY
+ARG VITE_API_URL
+
+# Set environment variables for the build
+ENV VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY
+ENV VITE_API_URL=$VITE_API_URL
 
 # Build the application
 RUN npm run build
 
 # Stage 2: Production Stage
-# Use nginx to serve the built application
 FROM nginx:alpine
 
-# Copy the built files from build stage to nginx's serving directory
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /project/app/dist /usr/share/nginx/html
 
 EXPOSE 80
 
