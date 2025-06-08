@@ -1,35 +1,26 @@
-# Stage 1: Build Stage
-FROM node:20-alpine as build
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files first (better caching)
+# Copy package files first (for better caching of npm install)
 COPY app/package*.json ./
 RUN npm install
 
-# Copy the entire project (both app and server for schema access)
+# Copy the entire project
 COPY . /project
 
 # Set up the app directory
 WORKDIR /project/app
-RUN npm install
+RUN npm install  # Install frontend dependencies
 
-# Accept build arguments for environment variables
-ARG VITE_CLERK_PUBLISHABLE_KEY
-ARG VITE_API_URL
+# Install nodemon globally for development
+RUN npm install -g nodemon
 
-# Set environment variables for the build
-ENV VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY
-ENV VITE_API_URL=$VITE_API_URL
+# Copy the .env file into the container at runtime
+COPY app/.env .env
 
-# Build the application
-RUN npm run build
+# Expose the development server port
+EXPOSE 5173
 
-# Stage 2: Production Stage
-FROM nginx:alpine
-
-COPY --from=build /project/app/dist /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Start the frontend server using nodemon
+CMD ["npx", "vite"]
