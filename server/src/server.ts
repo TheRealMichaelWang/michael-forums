@@ -25,6 +25,12 @@ app.use(ensureRegistration) //to ensure new users are registered
 const CORS_WHITELIST = [
   'http://localhost:5173',
   'https://localhost:5173',
+  'http://frontend:5173',
+  'https://frontend:5173',
+  'http://localhost:80',
+  'https://localhost:80',
+  'http://localhost',
+  'https://localhost',
 ]
 
 async function startServer() {
