@@ -22,6 +22,8 @@ services:
     ports:
       - "4000:4000"
       - "5555:5555"
+    environment:
+      - DATABASE_HOST=db
     env_file:
       - ./server/.env
     depends_on:
